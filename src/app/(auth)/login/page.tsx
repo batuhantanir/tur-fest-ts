@@ -24,11 +24,16 @@ const initialValues = {
   password: isLocal ? loginDetails.password : '',
 };
 
+interface SubmitValues {
+    mail: string;
+    password: string;
+}
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, setLoading, login } = useAuthStore();
+  const { isLoading, setLoading, login } = useAuthStore();
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: SubmitValues) => {
     const updateValues = { email: values.mail, password: values.password };
     setLoading(true);
     service
@@ -112,7 +117,7 @@ const Login = () => {
                     }
                   )}
                 >
-                  Şifre {loading ? 'loading' : ''}
+                  Şifre {isLoading ? 'loading' : ''}
                 </label>
                 <Field
                   className={cn(

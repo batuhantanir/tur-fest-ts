@@ -11,7 +11,7 @@ import Loading from '@/app/loading';
 const HOME_ROUTE = '/';
 const LOGIN_ROUTE = '/login';
 
-export default function withAuth(Component: React.ReactNode, routeRole: string) {
+export default function withAuth(Component: React.ComponentType<any>, routeRole: string) {
   const ComponentWithAuth = (props: any) => {
     const pathname = usePathname();
     const router = useRouter();
@@ -66,7 +66,7 @@ export default function withAuth(Component: React.ReactNode, routeRole: string) 
         if (isAuthenticated) {
           if (routeRole === 'auth') {
             if (searchParams.get('redirect')) {
-              router.replace(searchParams.get('redirect'));
+              router.replace(searchParams.get('redirect') || HOME_ROUTE);
             } else {
               router.replace(HOME_ROUTE);
             }
