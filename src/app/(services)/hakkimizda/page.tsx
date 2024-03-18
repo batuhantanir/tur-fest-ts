@@ -14,7 +14,7 @@ function AboutUs() {
         </h3>
         <ul className="list-disc ">
           {aboutUsData.children.map((item, index) => (
-            <li className="list-item list-none">
+            <li className="list-item list-none" key={index}>
               <p className="font-medium mt-3 ">
                 <span>•</span> <span> {item.title}</span>
               </p>

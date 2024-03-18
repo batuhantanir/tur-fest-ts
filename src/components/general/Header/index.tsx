@@ -6,12 +6,7 @@ import { usePathname } from 'next/navigation';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { BsSuitcaseLgFill } from 'react-icons/bs';
 import { FaPhone, FaRegUser, FaUnlock } from 'react-icons/fa';
-import {
-  FaCircleInfo,
-  FaHouse,
-  FaRegCircleUser,
-  FaUser,
-} from 'react-icons/fa6';
+import { FaCircleInfo, FaHouse, FaRegCircleUser } from 'react-icons/fa6';
 import { twMerge } from 'tailwind-merge';
 
 import {
@@ -23,57 +18,14 @@ import { useAuthStore } from '@/store/useAuthStore';
 
 import { cn } from '@/lib/utils';
 import './Header.css';
-
-interface LinkButtonProps {
-  onClick?: () => void;
-  children: React.ReactNode;
-  icon?: React.ElementType;
-  href?: string;
-  className?: string;
-}
+import LoginAndRegister from './components/LoginAndRegister';
+import LinkButton from './components/LinkButton';
 
 interface OnClickProps {
   onClick: MouseEventHandler;
   children: React.ReactNode;
   className?: string;
 }
-
-export const LinkButton = ({
-  onClick,
-  children,
-  icon: Icon,
-  href = '',
-  className = '',
-}: LinkButtonProps) => {
-  return (
-    <Link
-      href={href}
-      onClick={onClick && onClick}
-      className={`flex gap-4 items-center ${className}`}
-    >
-      {Icon ? (
-        <Icon className="h-[20px] w-[20px]" size={20} />
-      ) : (
-        <div className="h-[20px] w-[20px]"></div>
-      )}
-      <span>{children}</span>
-    </Link>
-  );
-};
-
-export const Brand = () => {
-  return (
-    <Link href="/">
-      <Image
-        src="/logoNormal.png"
-        width={118}
-        height={45}
-        alt="Turfest Logo"
-        className=""
-      />
-    </Link>
-  );
-};
 
 function Header() {
   const [openNavbar, setOpenNavbar] = useState(false);
@@ -141,26 +93,26 @@ function Header() {
 
   return (
     <>
-      {pathname != '/' && (
-        <div className={` h-[74.75px] md:h-[114.75px]`}></div>
-      )}{' '}
+      {pathname != '/' && <div className={'h-[74.75px] md:h-[114.75px]'}></div>}
       {/* Yer tutucu */}
       <header
-        className={twMerge(
-          `w-full   transition-all duration-200 fixed top-0  z-[40]  
-            ${
-              scrollY > scrollPoint
-                ? ' shadow-black drop-shadow-md bg-white text-black'
-                : 'text-white bg-transparent'
-            } `,
-          pathname != '/' && 'bg-white text-black'
+        className={cn(
+          'w-full transition-all duration-200 fixed top-0  z-[40] text-white bg-transparent',
+          {
+            ' shadow-black drop-shadow-md bg-white text-black':
+              scrollY > scrollPoint,
+            'bg-white text-black': pathname != '/',
+          }
         )}
       >
         <div className={`bg-transparent w-full md:container md:mx-auto `}>
           <div
-            className={` flex justify-center md:justify-between items-center ${
-              scrollY > scrollPoint && 'border-b'
-            } md:px-5 relative`}
+            className={cn(
+              ' flex justify-center md:justify-between items-center md:px-5 relative',
+              {
+                'border-b': scrollY > scrollPoint,
+              }
+            )}
           >
             <Link href="/">
               <Image
@@ -264,15 +216,14 @@ function Header() {
               openNavbar && 'open'
             }`}
           >
-            {Array(6)
-              .map((_, index) => (
-                <span
-                  key={index}
-                  className={cn('bg-cst-primary', {
-                    'bg-white': openNavbar,
-                  })}
-                ></span>
-              ))}
+            {Array(6).map((_, index) => (
+              <span
+                key={index}
+                className={cn('bg-cst-primary', {
+                  'bg-white': openNavbar,
+                })}
+              ></span>
+            ))}
           </div>
           <div
             ref={navbarRef}
@@ -302,21 +253,7 @@ function Header() {
             {!isLoading && (
               <div className="flex flex-col items-start gap-3 px-5 mb-5 md:hidden ">
                 {isAuthenticated ? (
-                  <>
-                    <LinkButton
-                      onClick={() => setOpenNavbar(false)}
-                      icon={FaUser}
-                      href="/login"
-                    >
-                      Giriş yap
-                    </LinkButton>
-                    <LinkButton
-                      onClick={() => setOpenNavbar(false)}
-                      href="/register"
-                    >
-                      Üye ol
-                    </LinkButton>
-                  </>
+                  <LoginAndRegister setOpenNavbar={setOpenNavbar} />
                 ) : (
                   <>
                     <LinkButton

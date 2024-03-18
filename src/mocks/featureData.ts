@@ -6,7 +6,7 @@ export const cardsData = [
     id: 1,
     title: 'Ucuz Fiyatlar',
     description: 'TurFest size en ucuz fiyatlarla en kaliteli tatili yaşatır.',
-    icon: 's',
+    icon: FaDollarSign,
   },
   {
     id: 2,

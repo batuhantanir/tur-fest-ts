@@ -14,6 +14,7 @@ import Table from './components/Table';
 //Utils
 import service from '@/lib/axios';
 import TourInformation from './components/TourInformation';
+import withAuth from '@/components/withAuth';
 
 function TourDetail({ params }: NextPageProps) {
   const [tour, setTour] = useState<Tour | null>(null);
@@ -75,4 +76,4 @@ function TourDetail({ params }: NextPageProps) {
   );
 }
 
-export default TourDetail;
+export default withAuth(TourDetail, 'optional');
