@@ -1,13 +1,14 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
-const config = {
-  darkMode: ["class"],
+const config: Config = {
+  darkMode: "class",
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -80,7 +81,20 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/forms"),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'text-shadow': (value: string) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      )
+    }),
+  ],
+};
 
-export default config
+export default config;

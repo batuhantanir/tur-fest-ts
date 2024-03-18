@@ -1,13 +1,20 @@
-import React from "react";
-import { FaLocationArrow, FaRegClock, FaBus, FaPlane } from "react-icons/fa";
-import Image from "next/image";
-import CostumButton from "@/components/CostumButton";
-import IconBoxWrapper, { IconBox } from "@/components/IconBoxs";
-import { timeStamp } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import spinner from "./assets/spinner.gif";
-import PriceSchema from "@/components/general/priceSchema";
-import Link from "next/link";
+import React from 'react';
+import { FaLocationArrow, FaRegClock, FaBus, FaPlane } from 'react-icons/fa';
+import Image from 'next/image';
+import CostumButton from '@/components/CostumButton';
+import IconBoxWrapper, { IconBox } from '@/components/IconBoxs';
+// import { timeStamp } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import spinner from './assets/spinner.gif';
+import PriceSchema from '@/components/general/priceSchema';
+import Link from 'next/link';
+
+import { Tour } from '@/types/tour';
+
+interface ProductCardProps {
+  products: Tour[];
+}
+
 export const ProductCardSkeleton = () => {
   return (
     <div className="space-y-3 lg:col-span-3">
@@ -51,7 +58,7 @@ export const ProductCardSkeleton = () => {
   );
 };
 
-function ProductCard({ products }) {
+function ProductCard({ products }: ProductCardProps) {
   return (
     <div className="space-y-3 lg:col-span-3">
       {products.map((product, index) => (
@@ -70,7 +77,7 @@ function ProductCard({ products }) {
                 loading="lazy"
                 placeholder="blur"
                 blurDataURL={spinner.src}
-                alt={product.name ? product.name : "tur resmi"}
+                alt={product.name ? product.name : 'tur resmi'}
               />
             ) : (
               <Skeleton className="w-full h-full bg-gray-200" />
@@ -93,11 +100,11 @@ function ProductCard({ products }) {
               >
                 <IconBox
                   icon={FaRegClock}
-                  text={timeStamp(product.begin_date, product.end_date)}
+                  // text={timeStamp(product.begin_date, product.end_date)}
                 />
                 <IconBox
-                  icon={product.vehicle == 1 ? FaBus : FaPlane}
-                  text={product.vehicle == 1 ? "Otobüs" : "Uçak"}
+                  icon={product.vehicle == 'bus' ? FaBus : FaPlane}
+                  text={product.vehicle == 'bus' ? 'Otobüs' : 'Uçak'}
                 />
                 <IconBox icon={FaLocationArrow} text={product.city} />
               </IconBoxWrapper>

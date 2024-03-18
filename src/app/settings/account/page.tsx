@@ -9,6 +9,12 @@ import { useMediaQuery } from '@/lib/useMediaQuery';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 
+interface Values {
+  name: string;
+  surname: string;
+  email: string;
+}
+
 const validationSchema = Yup.object({
   name: Yup.string()
     .required('Bu alan zorunludur')
@@ -30,18 +36,18 @@ const validationSchema = Yup.object({
     ),
 });
 
-axios
-  .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/credentials`)
-  .then(function (response) {
-    if (response.status === 200) {
-      setUser(response.data.data);
-    }
-  })
-  .catch(function (error) {
-    alert(error.message);
-  });
+// axios
+//   .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/credentials`)
+//   .then(function (response) {
+//     if (response.status === 200) {
+//       setUser(response.data.data);
+//     }
+//   })
+//   .catch(function (error) {
+//     alert(error.message);
+//   });
 
-const onSubmit = (values) => {
+const onSubmit = (values: Values) => {
   console.log(values);
 };
 const initialValues = {
@@ -52,7 +58,7 @@ const initialValues = {
 
 function Account() {
   const [user, setUser] = useState({});
-  const isMobile = useMediaQuery(768);
+  const isMobile = useMediaQuery('(max-width: 768px');
 
   return (
     <>
