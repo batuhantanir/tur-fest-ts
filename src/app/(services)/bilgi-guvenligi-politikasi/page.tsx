@@ -1,7 +1,6 @@
 import React from 'react';
 import ServicesContainer from '@/components/services/ServicesContainer';
 import TextComponent from '@/components/services/TextComponent';
-
 import { InformationSecurityPolicyData } from '@/mocks/servicesMocks';
 
 function InformationSecurityPolicy() {

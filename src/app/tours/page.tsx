@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, Fragment, use, useCallback } from 'react';
+import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
@@ -7,12 +7,11 @@ import {
   FunnelIcon,
   MinusIcon,
   PlusIcon,
-  Squares2X2Icon,
 } from '@heroicons/react/20/solid';
 import { FaArrowDown } from 'react-icons/fa6';
 import { FaArrowUp } from 'react-icons/fa6';
-import ProductCard, { ProductCardSkeleton } from './ProductCard';
-import axios from 'axios';
+import ProductCard from './components/ProductCard';
+import ProductCardSkeleton from './components/ProductCardSkeleton';
 import {
   Pagination,
   PaginationContent,
@@ -28,6 +27,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 // import { whichMonth } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import service from '@/lib/axios';
+
+type SubCategory = {
+  _id: string;
+  name: string;
+};
+
+type Category = {
+  _id: string;
+  name: string;
+  sub_categories: Array<SubCategory>;
+};
 
 const sortOptions = [
   { name: 'En Popüler', key: 'most_popular', href: '#', current: true },
@@ -156,35 +166,35 @@ function Tours() {
       });
   }, [sortOptionsName]);
 
-  // useEffect(() => {
-  //   service
-  //     .get(`/categories`)
-  //     .then(function (response) {
-  //       const categories = response.data.data.map((category) => {
-  //         return {
-  //           id: category._id,
-  //           name: category.name,
-  //           sub_categories: category.sub_categories.map((sub_category) => {
-  //             return {
-  //               id: sub_category._id,
-  //               name: sub_category.name,
-  //               checked: false,
-  //             };
-  //           }),
-  //         };
-  //       });
+  useEffect(() => {
+    service
+      .get(`/categories`)
+      .then(function (response) {
+        const categories = response.data.data.map((category: Category) => {
+          return {
+            id: category._id,
+            name: category.name,
+            sub_categories: category.sub_categories.map((sub_category) => {
+              return {
+                id: sub_category._id,
+                name: sub_category.name,
+                checked: false,
+              };
+            }),
+          };
+        });
 
-  //       setFilters((prev) => {
-  //         return [...prev, ...categories];
-  //       });
-  //     })
-  //     .catch(function (error) {
-  //       alert(error.message);
-  //     })
-  //     .finally(() => {
-  //       setCategoryIsLoading(false);
-  //     });
-  // }, []);
+        setFilters((prev) => {
+          return [...prev, ...categories];
+        });
+      })
+      .catch(function (error) {
+        alert(error.message);
+      })
+      .finally(() => {
+        setCategoryIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     filters.map((item) => {
@@ -206,9 +216,6 @@ function Tours() {
 
   return (
     <div className="bg-white">
-      {
-        // console.log(filters)
-      }
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>

@@ -3,18 +3,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 //Icons
 import { FaChevronRight } from 'react-icons/fa6';
-import {
-  FaRegClock,
-  FaBus,
-  FaPlane,
-  FaCheck,
-  FaLocationArrow,
-} from 'react-icons/fa';
-import { FaTimes } from 'react-icons/fa';
+import { FaRegClock, FaBus, FaPlane, FaLocationArrow } from 'react-icons/fa';
 import { NextPageProps } from '@/types/tour';
 //COMPONENTS
 import CostumButton from '@/components/CostumButton';
-import Swip from './Swip';
+import Swip from './components/Swip';
 import IconBoxWrapper, { IconBox } from '@/components/IconBoxs';
 import Loading from '@/app/loading';
 import NotFound from '@/app/not-found';
@@ -26,62 +19,30 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import PriceSchema from '@/components/general/priceSchema';
+import Table from './components/Table';
 //Utils
 import { timeStamp } from '@/lib/utils';
+import service from '@/lib/axios';
 
-import axios from 'axios';
-
-interface TableItemProps {
-  item: string;
-  type: string;
-}
-
-export const TableItem = ({ item, type }: TableItemProps) => {
-  const className = 'py-3 border-b';
-  return (
-    <tr>
-      <td className={`${className} pl-10`}>{item}</td>
-      {type == 'includes' ? (
-        <>
-          <td className={className} align="center">
-            <FaCheck size={20} className="fill-green-600" />
-          </td>
-          <td className={className} align="center">
-            {' '}
-          </td>
-        </>
-      ) : (
-        <>
-          <td className={className} align="center">
-            {' '}
-          </td>
-          <td className={className} align="center">
-            <FaTimes size={20} className="fill-red-600" />
-          </td>
-        </>
-      )}
-    </tr>
+function convertKeywordsToString(keywords: string[]) {
+  return keywords.map((keyword, idx) =>
+    keywords.length - 1 !== idx ? keyword + ', ' : keyword
   );
-};
-
+}
 
 function TourDetail({ params }: NextPageProps) {
   const [tour, setTour] = useState<Tour | null>(null);
   const [loading, setLoading] = useState(true);
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const fetchData = useCallback(() => {
-    axios
-      .get(`${baseUrl}/tours/get/${params.tourid}`)
-      .then(function (response) {
-        if (response.status === 200) {
-          setTour(response.data.data.tour);
-          // console.log(response.data.data.tour)
-          setLoading(true);
-        }
+    service
+      .get('/tours/get/' + params.tourid)
+      .then(function (res) {
+        setTour(res.data.data.tour);
+        setLoading(true);
       })
-      .catch(function (error) {
-        alert(error.message);
+      .catch(function (err) {
+        alert(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -121,7 +82,7 @@ function TourDetail({ params }: NextPageProps) {
               <p className="flex-1 line-clamp-[9]">{tour.description}</p>
               <div className="flex space-x-1.5 font-semibold">
                 <span>Fiyat:</span>
-                <PriceSchema tour={tour} flex={true} />
+                <PriceSchema price={tour.price} flex={true} />
               </div>
               <div className="flex flex-wrap gap-2 items-center">
                 <CostumButton href="https://wa.me/+905059956402">
@@ -138,8 +99,8 @@ function TourDetail({ params }: NextPageProps) {
                 <IconBoxWrapper className="justify-between gap-0">
                   <IconBox icon={FaRegClock} text={tourTime} />
                   <IconBox
-                    icon={tour.vehicle == 1 ? FaBus : FaPlane}
-                    text={tour.vehicle == 1 ? 'Otobüs' : 'Uçak'}
+                    icon={tour.vehicle == 'bus' ? FaBus : FaPlane}
+                    text={tour.vehicle == 'bus' ? 'Otobüs' : 'Uçak'}
                   />
                   <IconBox icon={FaLocationArrow} text={tour.city} />
                 </IconBoxWrapper>
@@ -149,36 +110,21 @@ function TourDetail({ params }: NextPageProps) {
         </div>
         <div className="my-5">
           <div className="py-7 md:px-5 rounded-sm space-y-4 ">
-            <table className="w-full text-center space-x-3">
-              <tr className="border rounded-sm">
-                <th className="p-0.5 md:p-2 pl-10" align="start">
-                  Hizmet
-                </th>
-                <th className="p-2">Fiyat dahil</th>
-                <th className="p-2">Fiyat dahil değil</th>
-              </tr>
-              {tour.price_includes.map((item, index) => (
-                <TableItem key={index} item={item} type="includes" />
-              ))}
-              {tour.price_excludes.map((item, index) => (
-                <TableItem key={index} item={item} type="excludes" />
-              ))}
-            </table>
+            <Table
+              price_includes={tour.price_includes}
+              price_excludes={tour.price_excludes}
+            />
           </div>
         </div>
         <div className="mb-16">
           <Accordion type="single" collapsible className="w-full">
             {tour.tour_plan.map((item, index) => (
-              <AccordionItem key={index} value={index + 1}>
+              <AccordionItem key={index} value={(index + 1).toString()}>
                 <AccordionTrigger>
                   <div>
-                    {index + 1 + '. GÜN: '}
+                    <span>{index + 1 + '. GÜN: '}</span>
                     <span className="font-normal">
-                      {item?.keywords?.map((keyword, idx) =>
-                        item?.keywords?.length - 1 !== idx
-                          ? keyword + ', '
-                          : keyword
-                      )}
+                      {convertKeywordsToString(item.keywords)}
                     </span>
                   </div>
                 </AccordionTrigger>

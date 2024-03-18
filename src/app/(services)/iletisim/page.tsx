@@ -1,5 +1,6 @@
 import React from 'react';
 import ServicesContainer from '@/components/services/ServicesContainer';
+import { contactData } from '@/mocks/servicesMocks';
 
 function Contact() {
   return (
@@ -13,33 +14,32 @@ function Contact() {
         referrerPolicy="no-referrer-when-downgrade"
       ></iframe>
       <div className="py-2 space-y-4 ">
-        <h2 className="text-2xl font-medium">İletişim - Turfest</h2>
+        <h2 className="text-2xl font-medium">{contactData.title}</h2>
         <div className="flex flex-col gap-2">
-          <h6 className="font-semibold">İletişim</h6>
-          <div>
-            <p className="text-sm">
-              <a className="" href="mailto:turfest@gmail.com ">
-                <span className="font-medium">E-Posta:</span> turfest@gmail.com
+          <h6 className="font-semibold">{contactData.firstChild.title}</h6>
+          <div className="flex flex-col">
+            {contactData.firstChild.children.map((item, index) => (
+              <a key={index} href={item.href} className="text-sm ">
+                <span className="font-medium">{item.title} </span>
+                <span>{item.content}</span>
               </a>
-            </p>
-            <a href="tel:+905059956402" className="text-sm ">
-              <span className="font-medium">Telefon:</span> +90 505 995 64 02{' '}
-            </a>
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <h6 className="flex self-start font-semibold">Adres</h6>
-          <p className="text-sm">
-            Turfest Turizm Seyahat Acentesi İstanbul, Türkiye{' '}
-          </p>
+          <h6 className="flex self-start font-semibold">
+            {contactData.secondaryChild.title}
+          </h6>
+          <p className="text-sm">{contactData.secondaryChild.description}</p>
         </div>
         <div className="flex flex-col gap-2">
-          <h6 className="flex self-start font-semibold"> Kurumsal</h6>
+          <h6 className="flex self-start font-semibold">
+            {' '}
+            {contactData.thirdChild.title}
+          </h6>
           <div>
-            <p className="text-sm">
-              Şirket Ünvanı: TURFEST SEYAHAT ACENTELİĞİ VE TURİZM A.Ş
-            </p>
-            <p className="text-sm">Ticaret Sicil No: 111111</p>
+            <p className="text-sm">{contactData.thirdChild.description}</p>
+            <p className="text-sm">{contactData.thirdChild.description2}</p>
           </div>
         </div>
       </div>
