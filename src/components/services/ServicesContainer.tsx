@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { LinkButton } from '@/components/general/Header';
+import LinkButton from '@/components/general/Header/components/LinkButton';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { sercivesContainerData } from '@/mocks/servicesMocks';
