@@ -343,7 +343,7 @@ function Tours() {
           </Dialog>
         </Transition.Root>
 
-        <main className="w-full mx-auto max-w-7xl">
+        <main className="w-full container max-w-7xl">
           <div className="flex items-baseline justify-between py-6 pb-6 border-b border-gray-200">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Turlar
