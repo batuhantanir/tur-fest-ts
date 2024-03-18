@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SettingsContainer from '@/components/settings/SettingsContainer';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useMediaQuery } from '@/lib/useMediaQuery';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
-
+import service from '@/lib/axios';
 interface Values {
   name: string;
   surname: string;
@@ -60,6 +60,18 @@ function Account() {
   const [user, setUser] = useState({});
   const isMobile = useMediaQuery('(max-width: 768px');
 
+  useEffect(() => {
+  service.get('/user/credentials')
+    .then((response) => {
+    if (response.status === 200) {
+      console.log(response.data.data);
+      setUser(response.data.data);
+    }
+  })
+  .catch((error) => {
+  alert(error.message);
+})
+}, []);
   return (
     <>
       {!isMobile ? (
