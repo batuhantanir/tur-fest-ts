@@ -60,7 +60,7 @@ function Register() {
     surname: string;
     passwordAgain: string;
   }
-  const onSubmit = async (values:SubmitValues, { setFieldError }) => {
+  const onSubmit = async (values: SubmitValues, { setFieldError }: any) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
