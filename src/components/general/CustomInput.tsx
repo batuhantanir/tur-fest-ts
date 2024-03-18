@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Field, ErrorMessage } from 'formik';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '@/lib/utils';
 
 interface CustomInputProps {
   title: string;
@@ -17,7 +17,7 @@ const CustomInput = ({ title, className, name, type }: CustomInputProps) => {
         {title}
       </label>
       <Field
-        className={twMerge(
+        className={cn(
           'w-full text-gray-400 transition-colors duration-200 border p-3 rounded-md border-[#E4E4E7] focus:text-black',
           className
         )}

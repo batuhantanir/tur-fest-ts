@@ -1,14 +1,12 @@
 'use client';
-import { useMediaQuery } from '@/lib/useMediaQuery';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { BsSuitcaseLgFill } from 'react-icons/bs';
-import { FaPhone, FaRegUser, FaUnlock } from 'react-icons/fa';
+import { FaPhone } from 'react-icons/fa';
 import { FaCircleInfo, FaHouse, FaRegCircleUser } from 'react-icons/fa6';
-import { twMerge } from 'tailwind-merge';
-
+import { useMediaQuery } from '@/lib/useMediaQuery';
 import {
   Popover,
   PopoverContent,
@@ -17,9 +15,10 @@ import {
 import { useAuthStore } from '@/store/useAuthStore';
 
 import { cn } from '@/lib/utils';
-import './Header.css';
+import { twMerge } from 'tailwind-merge';
 import LoginAndRegister from './components/LoginAndRegister';
 import LinkButton from './components/LinkButton';
+import Hamburger from './components/Hamburger';
 
 interface OnClickProps {
   onClick: MouseEventHandler;
@@ -117,11 +116,9 @@ function Header() {
             <Link href="/">
               <Image
                 src={`${
-                  pathname == '/' && !isMobile
-                    ? scrollY > scrollPoint
-                      ? '/logoNormal.png'
-                      : '/logoBeyaz.png'
-                    : '/logoNormal.png'
+                  pathname != '/' || isMobile || scrollY > scrollPoint
+                    ? '/logoNormal.png'
+                    : '/logoBeyaz.png'
                 }`}
                 width={118}
                 height={45}
@@ -135,14 +132,7 @@ function Header() {
               </LinkButton>
               {!isLoading &&
                 (!isAuthenticated ? (
-                  <>
-                    <LinkButton icon={FaUnlock} href="/login">
-                      Giriş Yap
-                    </LinkButton>
-                    <LinkButton icon={FaRegUser} href="/register">
-                      Üye Ol
-                    </LinkButton>
-                  </>
+                  <LoginAndRegister setOpenNavbar={setOpenNavbar} />
                 ) : (
                   <>
                     <Popover>
@@ -177,11 +167,7 @@ function Header() {
                 ))}
             </div>
           </div>
-          <nav
-            className={twMerge(
-              'hidden md:flex flex-col md:flex-row gap-3 md:gap-6 py-2 mb-1 px-5 text-gray-500'
-            )}
-          >
+          <nav className="hidden md:flex flex-col md:flex-row gap-3 md:gap-6 py-2 mb-1 px-5 text-gray-500">
             {navLinks.map((link, index) => (
               <a
                 key={index}
@@ -208,23 +194,11 @@ function Header() {
       </header>
       {isMobile && (
         <>
-          <div
-            ref={hamburgerRef}
-            onClick={() => setOpenNavbar(!openNavbar)}
-            id="nav-icon2"
-            className={`block  md:hidden z-[10000] fixed  left-0 ${
-              openNavbar && 'open'
-            }`}
-          >
-            {Array(6).map((_, index) => (
-              <span
-                key={index}
-                className={cn('bg-cst-primary', {
-                  'bg-white': openNavbar,
-                })}
-              ></span>
-            ))}
-          </div>
+          <Hamburger
+            openNavbar={openNavbar}
+            setOpenNavbar={setOpenNavbar}
+            hamburgerRef={hamburgerRef}
+          />
           <div
             ref={navbarRef}
             className={`text-white top-0 left-0  bg-cst-primary text-xl font-bold  brightness-90 transition-transform duration-300 md:duration-0 p-5 md:p-0 fixed md:relative h-full min-w-[280px] md:h-fit z-[110] md:z-0 ${
@@ -234,11 +208,7 @@ function Header() {
             }`}
           >
             <div className="w-full h-16"></div>
-            <nav
-              className={twMerge(
-                'flex flex-col md:hidden md:flex-row gap-3 md:gap-6 py-2 px-5 '
-              )}
-            >
+            <nav className="flex flex-col md:hidden md:flex-row gap-3 md:gap-6 py-2 px-5 ">
               {navLinks.map((link, index) => (
                 <LinkButton
                   href={typeof link.href == 'string' ? link.href : link.href[0]}
@@ -276,11 +246,12 @@ function Header() {
             )}
           </div>
           <div
-            className={` bg-black/50 transition-opacity duration-400 w-full top-0 left-0  h-full ${
-              openNavbar
-                ? 'z-[100] opacity-100 md:opacity-0 fixed '
-                : 'relative opacity-0'
-            }`}
+            className={cn(
+              'bg-black/50 transition-opacity duration-400 w-full top-0 left-0  h-full relative opacity-0',
+              {
+                'z-[100] opacity-100 md:opacity-0 fixed ': openNavbar,
+              }
+            )}
           ></div>
         </>
       )}
