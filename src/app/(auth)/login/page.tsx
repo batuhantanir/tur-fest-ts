@@ -73,9 +73,9 @@ const Login = () => {
               <label
                 htmlFor="mail"
                 className={cn(
-                  'absolute left-4 top-3 select-none text-gray-400 text-base group-focus-within:top-[-6px] group-focus-within:px-1 group-focus-within:left-[13px] group-focus-within:text-xs group-focus-within:text-ilki',
+                  'absolute left-4 top-3 text-base group-focus-within:text-ilki group-focus-within:bg-white transition-all duration-200 text-gray-400 select-none  group-focus-within:top-[-6px] group-focus-within:px-1 group-focus-within:left-[13px] group-focus-within:text-xs',
                   {
-                    'group-focus-within:text-destructive-foreground text-destructive-foreground':
+                    'group-focus-within:text-red-500 text-red-500':
                       props.errors.mail && props.touched.mail,
                     'top-[-6px] text-xs px-1 left-[13px]  bg-white':
                       props.values.mail.length >= 1,
@@ -86,7 +86,7 @@ const Login = () => {
               </label>
               <Field
                 className={cn(
-                  'w-full text-black border rounded-md h-[50px] px-4 pr-10 border-darkGray focus:border-[2px] focus:outline-none focus:ring-0 focus:border-ilki',
+                  'w-full border rounded-md h-[50px] focus:border-ilki text-darkGray border-darkGray px-4 pr-10 focus:border-[2px] focus:ring-0 focus:outline-none',
                   {
                     'border-red-500 focus:border-red-500 border-[2px]':
                       props.touched.mail && props.errors.mail,

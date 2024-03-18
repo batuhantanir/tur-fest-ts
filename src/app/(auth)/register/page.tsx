@@ -1,7 +1,6 @@
 'use client';
 import LoginContainer from '@/components/login/LoginContainer';
 import withAuth from '@/components/withAuth';
-import Logo from '@/public/logoNormal.png';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
@@ -54,7 +53,14 @@ function Register() {
     setShowPasswordAgain(!showPasswordAgain);
   };
 
-  const onSubmit = async (values, { setFieldError }) => {
+  interface SubmitValues {
+    mail: string;
+    password: string;
+    name: string;
+    surname: string;
+    passwordAgain: string;
+  }
+  const onSubmit = async (values:SubmitValues, { setFieldError }) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
@@ -82,7 +88,7 @@ function Register() {
 
   return (
     <>
-      <LoginContainer title="Üye Ol" description="" Logo={Logo}>
+      <LoginContainer title="Üye Ol" description="">
         <Formik
           initialValues={{
             mail: '',

@@ -6,7 +6,6 @@ import { twMerge } from 'tailwind-merge';
 import LoginContainer from '@/components/login/LoginContainer';
 import { FcLock } from 'react-icons/fc';
 import { IoIosArrowBack } from 'react-icons/io';
-import Logo from '@/public/logoNormal.png';
 import Link from 'next/link';
 
 const validationSchema = Yup.object({
@@ -25,7 +24,6 @@ const InitialComponent = () => {
         title="Şifreni mi unuttun?"
         description="Email adresine gelen bağlantı ile şifre yenileme ekranına gidebilirsin"
         titleIcon={<FcLock size={29} />}
-        Logo={Logo}
       >
         <Formik
           initialValues={{ mail: '' }}

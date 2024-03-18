@@ -19,6 +19,12 @@ const config = {
     },
     extend: {
       colors: {
+        "cst-primary": "#FE1B18",
+        "cst-secondary": "#05146E",
+        "cst-description": "#4f536c",
+        "lightgrey": "#f5f5f5",
+        ilki: "#696CFF",
+        ikincisi: "#E7E7FF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
