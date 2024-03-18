@@ -10,6 +10,12 @@ import { useMediaQuery } from '@/lib/useMediaQuery';
 import Link from 'next/link';
 import { IoIosArrowBack } from 'react-icons/io';
 
+interface Values {
+  password: string;
+  newpassword: string;
+  newpasswordAgain: string;
+}
+
 const validationSchema = Yup.object({
   password: Yup.string().required('Bu alan zorunludur'),
   newpassword: Yup.string()
@@ -31,7 +37,7 @@ const initialValues = {
   newpasswordAgain: '',
 };
 
-const onSubmit = (values) => {
+const onSubmit = (values: Values) => {
   console.log(values);
 };
 
@@ -41,7 +47,7 @@ function ResetPassword() {
   const [password, setPassword] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px');
 
-  const handlePassword = (e) => {
+  const handlePassword = () => {
     setPassword(!password);
   };
 

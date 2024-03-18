@@ -1,10 +1,10 @@
 export type Tour = {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: Price;
   category: Category;
-  vehicle: string;
+  vehicle: 'bus' | 'plane';
   reserved: number;
   quota: number;
   city: string;
