@@ -71,7 +71,7 @@ function Register() {
           surname: values.surname,
         }
       );
-    } 
+    } catch (error) {}
     // catch (error) {
     //   let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
     //   if (
