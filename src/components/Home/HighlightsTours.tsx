@@ -1,21 +1,22 @@
-import 'server-only';
-import ToursHorizontalCard from './ToursHorizontalCard';
+'use client';
+import { useEffect, useState } from 'react';
 import service from '@/lib/axios';
-
-const getPopular = () => {
-  service
-    .get('/tours/list?limit=3&order_by=popular')
-    .then((res) => {
-      return res.data.data?.tours;
-    })
-    .catch((err) => {
-      console.log(err);
-      return null;
-    });
-};
+import ToursHorizontalCard from './ToursHorizontalCard';
+import { Tour } from '@/types/tour';
 
 async function HighlightsTours() {
-  const data = await getPopular();
+  const [data, setData] = useState<Tour[]>([]);
+
+  useEffect(() => {
+    service
+      .get('/tours/list?limit=3&order_by=popular')
+      .then((res) => {
+        setData(res.data.data?.tours || []);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="py-8 space-y-8 md:container md:mx-auto">
