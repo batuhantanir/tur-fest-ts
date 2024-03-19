@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import SettingsContainer from '@/components/settings/SettingsContainer';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
 import axios from 'axios';
@@ -9,11 +9,14 @@ import { useMediaQuery } from '@/lib/useMediaQuery';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import service from '@/lib/axios';
-interface Values {
+
+interface User {
   name: string;
   surname: string;
   email: string;
 }
+
+interface AccountProps {}
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -36,52 +39,44 @@ const validationSchema = Yup.object({
     ),
 });
 
-// axios
-//   .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/credentials`)
-//   .then(function (response) {
-//     if (response.status === 200) {
-//       setUser(response.data.data);
-//     }
-//   })
-//   .catch(function (error) {
-//     alert(error.message);
-//   });
 
-const onSubmit = (values: Values) => {
-  console.log(values);
-};
-const initialValues = {
-  name: 'john',
-  surname: 'doe',
-  email: 'johndoe@gmail.com',
-};
-
-function Account() {
-  const [user, setUser] = useState({});
-  const isMobile = useMediaQuery('(max-width: 768px');
-
+const Account: React.FC<AccountProps> = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   useEffect(() => {
-  service.get('/user/credentials')
+    service
+    .get('/users/credentials')
     .then((response) => {
-    if (response.status === 200) {
-      console.log(response.data.data);
       setUser(response.data.data);
-    }
-  })
-  .catch((error) => {
-  alert(error.message);
-})
-}, []);
-  return (
-    <>
+      console.log(user);
+      setUser(response.data.data);
+    })
+      .catch((error) => {
+        alert(error.message);
+      });
+    }, []);
+    
+    const onSubmit = (values: User, { setSubmitting }: FormikHelpers<User>) => {
+      console.log(values);
+      setSubmitting(false);
+    };
+
+    return (
+      <>
       {!isMobile ? (
         <SettingsContainer>
           <div className="mx-auto container flex flex-col gap-5 py-5">
             <h1 className="border-b py-3 pl-1 border-[#E4E4E7]">
               Hesap Bilgileri
             </h1>
+            {user && (
             <Formik
-              initialValues={initialValues}
+             initialValues={{
+              name: user?.name || '',
+              surname: user?.surname || '',
+              email: user?.email || '',
+            }}
               validationSchema={validationSchema}
               onSubmit={onSubmit}
             >
@@ -109,6 +104,7 @@ function Account() {
                 </div>
               </Form>
             </Formik>
+            )}
           </div>
         </SettingsContainer>
       ) : (
@@ -116,8 +112,13 @@ function Account() {
           <h1 className="border-b py-3 pl-1 border-[#E4E4E7]">
             Hesap Bilgileri
           </h1>
+          {user && (
           <Formik
-            initialValues={initialValues}
+            initialValues={{
+              name: user?.name || '',
+              surname: user?.surname || '',
+              email: user?.email || '',
+            }}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
@@ -152,6 +153,7 @@ function Account() {
               </Link>
             </Form>
           </Formik>
+          )}
         </div>
       )}
     </>
