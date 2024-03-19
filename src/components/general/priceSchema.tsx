@@ -4,9 +4,15 @@ interface PriceSchemaProps {
   price: Price;
   flex?: boolean;
   discountStyle?: string;
+  reverse?: boolean;
 }
 
-function PriceSchema({ price, flex, discountStyle }: PriceSchemaProps) {
+function PriceSchema({
+  price,
+  flex,
+  discountStyle,
+  reverse,
+}: PriceSchemaProps) {
   const convertTL = (price: number) => {
     return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
@@ -18,7 +24,7 @@ function PriceSchema({ price, flex, discountStyle }: PriceSchemaProps) {
     <>
       {price.campaign_exists ? (
         <div className={`${flex && 'flex gap-2'}`}>
-          <div className="flex flex-col">
+          <div className={`flex flex-col ${reverse && 'order-2'}`}>
             <span className="text-sm line-through text-muted-foreground">
               {convertTL(price.normal_price)}
             </span>

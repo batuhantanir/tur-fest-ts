@@ -5,7 +5,7 @@ import LoginAndRegister from './LoginAndRegister';
 import LinkButton from './LinkButton';
 import { navLinks } from '@/mocks/header';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useMediaQuery } from '@/lib/useMediaQuery';
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 interface MobileProps {
   isLoading: boolean;
