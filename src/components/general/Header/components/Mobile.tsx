@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import Hamburger from './Hamburger';
 import { cn } from '@/lib/utils';
-import LoginAndRegister from './LoginAndRegister';
-import LinkButton from './LinkButton';
 import { navLinks } from '@/mocks/header';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useMediaQuery } from "@uidotdev/usehooks";
+import React, { useEffect, useRef } from 'react';
+import Hamburger from './Hamburger';
+import LinkButton from './LinkButton';
+import { useMediaQuery } from '@/lib/useMediaQuery';
 
 interface MobileProps {
   isLoading: boolean;
@@ -74,7 +73,7 @@ function Mobile({ isLoading, openNavbar, setOpenNavbar }: MobileProps) {
             {!isLoading && (
               <div className="flex flex-col items-start gap-3 px-5 mb-5 md:hidden ">
                 {isAuthenticated ? (
-                  <LoginAndRegister setOpenNavbar={setOpenNavbar} />
+                 ''
                 ) : (
                   <>
                     <LinkButton
