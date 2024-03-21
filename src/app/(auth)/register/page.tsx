@@ -1,6 +1,5 @@
 'use client';
 import LoginContainer from '@/components/login/LoginContainer';
-import withAuth from '@/components/withAuth';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
@@ -339,4 +338,4 @@ function Register() {
   );
 }
 
-export default withAuth(Register, 'auth');
+export default Register;

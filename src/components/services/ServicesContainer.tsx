@@ -4,7 +4,6 @@ import LinkButton from '@/components/general/Header/components/LinkButton';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { sercivesContainerData } from '@/mocks/servicesMocks';
-import withAuth from '../withAuth';
 
 interface ServicesContainerProps {
   children: React.ReactNode;
@@ -38,4 +37,4 @@ const ServicesContainer = ({ children }: ServicesContainerProps) => {
   );
 };
 
-export default withAuth(ServicesContainer, 'optional');
+export default ServicesContainer;
