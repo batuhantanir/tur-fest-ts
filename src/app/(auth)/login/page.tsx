@@ -25,8 +25,8 @@ const initialValues = {
 };
 
 interface SubmitValues {
-    mail: string;
-    password: string;
+  mail: string;
+  password: string;
 }
 
 const Login = () => {
@@ -42,11 +42,11 @@ const Login = () => {
         const accessToken = res.data.data.auth_token;
         if (accessToken) {
           localStorage.setItem('accessToken', accessToken);
+          login(res.data.data.user);
+          setLoading(false);
         } else {
           alert('Bir hata oluştu');
         }
-        login(res.data.data.user);
-        setLoading(false);
       })
       .catch(function (error) {
         alert(error.message);
