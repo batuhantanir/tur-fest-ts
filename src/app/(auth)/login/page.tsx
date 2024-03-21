@@ -1,12 +1,12 @@
 'use client';
 import LoginContainer from '@/components/login/LoginContainer';
-import withAuth from '@/components/withAuth';
 import { loginDetails } from '@/constants/config';
 import { isLocal } from '@/constants/env';
 import service from '@/lib/axios';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/store/useAuthStore';
+import { getServerAuthSession } from '@/server/auth';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { IoEye, IoEyeOffSharp } from 'react-icons/io5';
@@ -31,27 +31,13 @@ interface SubmitValues {
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { isLoading, setLoading, login } = useAuthStore();
 
   const onSubmit = (values: SubmitValues) => {
     const updateValues = { email: values.mail, password: values.password };
-    setLoading(true);
-    service
-      .post('/auth/login', updateValues)
-      .then(function (res) {
-        const accessToken = res.data.data.auth_token;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-          login(res.data.data.user);
-          setLoading(false);
-        } else {
-          alert('Bir hata oluştu');
-        }
-      })
-      .catch(function (error) {
-        alert(error.message);
-        // setLoading(false);
-      });
+    signIn('credentials', {
+      email: updateValues.email,
+      password: updateValues.password,
+    });
   };
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -62,6 +48,7 @@ const Login = () => {
       title="Hoşgeldiniz"
       description="Hesabınıza giriş yapın ve devam edin."
     >
+      <></>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -117,7 +104,7 @@ const Login = () => {
                     }
                   )}
                 >
-                  Şifre {isLoading ? 'loading' : ''}
+                  Şifre
                 </label>
                 <Field
                   className={cn(
@@ -190,4 +177,4 @@ const Login = () => {
   );
 };
 
-export default withAuth(Login, 'auth');
+export default Login;

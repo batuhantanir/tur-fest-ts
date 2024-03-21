@@ -1,20 +1,19 @@
+'use client';
 import { cn } from '@/lib/utils';
 import { navLinks } from '@/mocks/header';
 import { useAuthStore } from '@/store/useAuthStore';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Hamburger from './Hamburger';
 import LinkButton from './LinkButton';
 import { useMediaQuery } from '@/lib/useMediaQuery';
 
-interface MobileProps {
-  isLoading: boolean;
-  openNavbar: boolean;
-  setOpenNavbar: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface MobileProps {}
 
-function Mobile({ isLoading, openNavbar, setOpenNavbar }: MobileProps) {
+function Mobile() {
   const navbarRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [openNavbar, setOpenNavbar] = useState(true);
 
   const { logout, isAuthenticated } = useAuthStore();
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -39,6 +38,10 @@ function Mobile({ isLoading, openNavbar, setOpenNavbar }: MobileProps) {
       document.removeEventListener('mousedown', handleClick);
     };
   }, [navbarRef, isMobile, openNavbar, hamburgerRef]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
@@ -73,7 +76,7 @@ function Mobile({ isLoading, openNavbar, setOpenNavbar }: MobileProps) {
             {!isLoading && (
               <div className="flex flex-col items-start gap-3 px-5 mb-5 md:hidden ">
                 {isAuthenticated ? (
-                 ''
+                  ''
                 ) : (
                   <>
                     <LinkButton

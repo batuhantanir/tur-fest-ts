@@ -49,7 +49,7 @@ const Account: React.FC<AccountProps> = () => {
     .get('/users/credentials')
     .then((response) => {
       setUser(response.data.data);
-      console.log(user);
+      // console.log(user);
       setUser(response.data.data);
     })
       .catch((error) => {
