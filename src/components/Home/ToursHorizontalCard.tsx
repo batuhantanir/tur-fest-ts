@@ -19,7 +19,7 @@ function ToursHorizontalCard({ item }: ToursHorizontalCardProps) {
   );
 
   return (
-    <div className="bg-white flex flex-col justify-between  rounded-md shadow-md mx-5 sm:mx-0 min-w-[305px] w-[335px]  min-h-[512px]">
+    <div className="bg-white flex flex-col justify-between  rounded-md shadow-md transition-shadow hover:shadow-xl mx-5 sm:mx-0 min-w-[305px] w-[335px]  min-h-[512px]">
       <div className="w-full h-52 relative ">
         <Image
           src={`https://emur.dev/images/${item.images && item.images[0]}`}

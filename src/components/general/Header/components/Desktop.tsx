@@ -1,39 +1,39 @@
-import React from 'react';
-import Image from 'next/image';
-import LinkButton from './LinkButton';
-import Link from 'next/link';
-import LoginAndRegister from './LoginAndRegister';
-import { FaPhone, FaRegCircleUser } from 'react-icons/fa6';
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { navLinks } from '@/mocks/header';
 import { cn } from '@/lib/utils';
+import { navLinks } from '@/mocks/header';
+import { PhoneIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { FaRegCircleUser } from 'react-icons/fa6';
 import { twMerge } from 'tailwind-merge';
+import LinkButton from './LinkButton';
+import { useMediaQuery } from '@/lib/useMediaQuery';
+import { useAuthStore } from '@/store/useAuthStore';
 
-interface DesktopProps {
-  scrollY: number;
-  scrollPoint: number;
-  pathname: string;
-  isMobile: boolean;
-  setOpenNavbar: React.Dispatch<React.SetStateAction<boolean>>;
-  isLoading: boolean;
-  logout: () => void;
-  isAuthenticated: boolean;
-}
+function Desktop({ pathname, setIsLoading, setOpenNavbar, isLoading }: any) {
+  const [scrollY, setScrollY] = useState(0);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const { logout, isAuthenticated } = useAuthStore();
 
-function Desktop({
-  scrollY,
-  scrollPoint,
-  pathname,
-  isMobile,
-  setOpenNavbar,
-  isLoading,
-  logout,
-  isAuthenticated,
-}: DesktopProps) {
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    setIsLoading(false);
+    setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollPoint = isMobile ? 55 : 55;
   return (
     <header
       className={cn(
@@ -67,13 +67,33 @@ function Desktop({
               className="transition-all duration-200"
             />
           </Link>
-          <div className="items-center hidden gap-6 md:flex ">
-            <LinkButton href="tel:+905059956402" icon={FaPhone}>
-              0505 995 64 02
-            </LinkButton>
+          <div className="items-center hidden gap-3 md:flex ">
+            <Link href={'tel:+9005059956402'}>
+              <Button variant={'ghost'}>
+                <PhoneIcon className="w-4 h-4 mr-2" />
+                0505 995 64 02
+              </Button>
+            </Link>
             {!isLoading &&
               (!isAuthenticated ? (
-                <LoginAndRegister setOpenNavbar={setOpenNavbar} />
+                <>
+                  <Link href={'/login'}>
+                    <Button
+                      onClick={() => setOpenNavbar(false)}
+                      variant={'ghost'}
+                    >
+                      Giriş yap
+                    </Button>
+                  </Link>
+                  <Link href={'/register'}>
+                    <Button
+                      variant={'ghost'}
+                      onClick={() => setOpenNavbar(false)}
+                    >
+                      Üye ol
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <>
                   <Popover>
@@ -113,7 +133,7 @@ function Desktop({
             <a
               key={index}
               className={twMerge(
-                'relative  hover:text-black after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black after:transition-all after:duration-300 ',
+                'relative hover:text-black after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black after:transition-all after:duration-300 ',
                 `${
                   (typeof link.href == 'string'
                     ? pathname === link.href

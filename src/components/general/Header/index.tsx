@@ -9,27 +9,9 @@ import Desktop from './components/Desktop';
 
 function Header() {
   const [openNavbar, setOpenNavbar] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   const pathname = usePathname();
-  const { logout, isAuthenticated } = useAuthStore();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    setIsLoading(false);
-    setScrollY(window.scrollY);
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const scrollPoint = isMobile ? 55 : 55;
 
   return (
     <>
@@ -37,14 +19,10 @@ function Header() {
       {/* Yer tutucu */}
       <Desktop
         {...{
-          scrollY,
-          scrollPoint,
           pathname,
-          isMobile,
           setOpenNavbar,
+          setIsLoading,
           isLoading,
-          logout,
-          isAuthenticated,
         }}
       />
       <Mobile
