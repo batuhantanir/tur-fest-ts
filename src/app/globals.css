@@ -65,6 +65,11 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
+.swiper-wrapper {
+  -webkit-transition-timing-function:linear!important; 
+  -o-transition-timing-function:linear!important;
+  transition-timing-function:linear!important; 
+}
  
 @layer base {
   * {
