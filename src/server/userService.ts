@@ -5,7 +5,7 @@ export const userService = {
 };
 
 async function authenticate(email: string, password: string) {
-  const response = await axios.post(`https://emur.dev/auth/refresh`, {
+  const response = await axios.post(`https://emur.dev/auth/login`, {
     email: email,
     password: password,
   });
