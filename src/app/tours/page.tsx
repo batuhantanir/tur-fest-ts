@@ -1,5 +1,11 @@
 'use client';
-import React, { useState, useEffect, Fragment, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  useCallback,
+  SetStateAction,
+} from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
@@ -67,42 +73,6 @@ const subCategories = [
   { name: 'Laptop Sleeves', href: '#' },
 ];
 
-// const filters = [
-//   {
-//     id: 'dönem',
-//     name: 'Dönem',
-//     options: [
-//       { value: 'ilkbahar', label: 'İlkbahar', checked: false },
-//       { value: 'yaz', label: 'Yaz', checked: true },
-//       { value: 'sonbahar', label: 'Sonbahar', checked: false },
-//       { value: 'kış', label: 'Kış', checked: false },
-//     ],
-//   },
-//   {
-//     id: 'category',
-//     name: 'Category',
-//     options: [
-//       { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-//       { value: 'sale', label: 'Sale', checked: false },
-//       { value: 'travel', label: 'Travel', checked: true },
-//       { value: 'organization', label: 'Organization', checked: false },
-//       { value: 'accessories', label: 'Accessories', checked: false },
-//     ],
-//   },
-//   {
-//     id: 'size',
-//     name: 'Size',
-//     options: [
-//       { value: '2l', label: '2L', checked: false },
-//       { value: '6l', label: '6L', checked: false },
-//       { value: '12l', label: '12L', checked: false },
-//       { value: '18l', label: '18L', checked: false },
-//       { value: '20l', label: '20L', checked: false },
-//       { value: '40l', label: '40L', checked: true },
-//     ],
-//   },
-// ]
-
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
 }
@@ -134,7 +104,7 @@ function Tours() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const handleSearch = useCallback((query, term) => {
+  const handleSearch = useCallback((query: any, term: any) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
       params.set(query, term.toString());
@@ -184,9 +154,7 @@ function Tours() {
           };
         });
 
-        setFilters((prev) => {
-          return [...prev, ...categories];
-        });
+        setFilters(categories);
       })
       .catch(function (error) {
         alert(error.message);
@@ -202,7 +170,7 @@ function Tours() {
     });
   }, [filters]);
 
-  const sortOptionChange = ({ option }) => {
+  const sortOptionChange = ({ option }: { option: any }) => {
     sortOptions.map((item) => {
       if (item.name === option.name) {
         item.current = true;
@@ -277,7 +245,7 @@ function Tours() {
                       ))}
                     </ul>
 
-                    {filters.map((section) => (
+                    {filters.map((section:any) => (
                       <Disclosure
                         as="div"
                         key={section.id}
@@ -308,7 +276,7 @@ function Tours() {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.sub_categories.map(
-                                  (option, optionIdx) => (
+                                  (option:any, optionIdx:any) => (
                                     <div
                                       key={option.value}
                                       className="flex items-center"
@@ -433,7 +401,7 @@ function Tours() {
                     </>
                   )}
 
-                  {filters.map((category) => (
+                  {filters.map((category: any) => (
                     <li key={category.name}>
                       <a href={category.href}>{category.name}</a>
                     </li>
@@ -441,18 +409,18 @@ function Tours() {
                 </ul>
                 {categoryIsLoading && (
                   <div>
-                    {Array.from({ length: 3 }).map((_, i) => (
+                    {Array.from({ length: 2 }).map((_, i) => (
                       <div
                         className="flex justify-between border-b py-6"
                         key={i}
                       >
-                        <Skeleton className="w-[12y0px] h-[20px] bg-gray-200" />
+                        <Skeleton className="w-[120px] h-[20px] bg-gray-200" />
                         <Skeleton className="w-[20px] h-[20px] bg-gray-200" />
                       </div>
                     ))}
                   </div>
                 )}
-                {filters.map((section) => (
+                {filters.map((section: any) => (
                   <Disclosure
                     as="div"
                     key={section.id}
@@ -482,29 +450,31 @@ function Tours() {
                         </h3>
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-4">
-                            {section.sub_categories.map((option, optionIdx) => (
-                              <div
-                                key={option.value}
-                                className="flex items-center"
-                              >
-                                <input
-                                  id={`filter - ${section.id} - ${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  defaultValue={option.value}
-                                  type="checkbox"
-                                  defaultChecked={option.checked}
-                                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                />
-                                <label
-                                  htmlFor={`filter - ${section.id} - ${optionIdx}`}
-                                  className="ml-3 text-sm text-gray-600"
+                            {section.sub_categories.map(
+                              (option: any, optionIdx: any) => (
+                                <div
+                                  key={option.value}
+                                  className="flex items-center"
                                 >
-                                  {option.name}
-                                  {option.total_tours &&
-                                    `(${option.total_tours})`}
-                                </label>
-                              </div>
-                            ))}
+                                  <input
+                                    id={`filter - ${section.id} - ${optionIdx}`}
+                                    name={`${section.id}[]`}
+                                    defaultValue={option.value}
+                                    type="checkbox"
+                                    defaultChecked={option.checked}
+                                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                  />
+                                  <label
+                                    htmlFor={`filter - ${section.id} - ${optionIdx}`}
+                                    className="ml-3 text-sm text-gray-600"
+                                  >
+                                    {option.name}
+                                    {option.total_tours &&
+                                      `(${option.total_tours})`}
+                                  </label>
+                                </div>
+                              )
+                            )}
                           </div>
                         </Disclosure.Panel>
                       </>
@@ -582,26 +552,27 @@ function Tours() {
                       <PaginationLink href="#">
                         {offset / limit + 1}
                       </PaginationLink>
-                      {offset + limit < totalProductsCount && !isMobile && (
-                        <PaginationLink
-                          href={`/tours?limit${limit}&&offset=${
-                            offset + limit
-                          }&${searchQuery
-                            .split('&')
-                            .filter(
-                              (item) =>
-                                !item.includes('limit') &&
-                                !item.includes('offset')
-                            )
-                            .join('&')}`}
-                        >
-                          {offset / limit + 2}
-                        </PaginationLink>
-                      )}
+                      {offset + limit < Number(totalProductsCount) &&
+                        !isMobile && (
+                          <PaginationLink
+                            href={`/tours?limit${limit}&&offset=${
+                              offset + limit
+                            }&${searchQuery
+                              .split('&')
+                              .filter(
+                                (item) =>
+                                  !item.includes('limit') &&
+                                  !item.includes('offset')
+                              )
+                              .join('&')}`}
+                          >
+                            {offset / limit + 2}
+                          </PaginationLink>
+                        )}
                     </PaginationItem>
                     {!isMobile && (
                       <PaginationItem>
-                        {offset + 2 * limit < totalProductsCount && (
+                        {offset + 2 * limit < Number(totalProductsCount) && (
                           <PaginationEllipsis />
                         )}
                       </PaginationItem>
@@ -609,7 +580,7 @@ function Tours() {
                     <PaginationItem>
                       <PaginationNext
                         href={
-                          offset + limit < totalProductsCount
+                          offset + limit < Number(totalProductsCount)
                             ? `/tours?limit=${limit}&offset=${
                                 offset + limit
                               }&${searchQuery
@@ -623,7 +594,7 @@ function Tours() {
                             : '#'
                         }
                         className={`${
-                          !(offset + limit < totalProductsCount) &&
+                          !(offset + limit < Number(totalProductsCount)) &&
                           'pointer-events-none text-black/50 hover:text-black/50'
                         }`}
                       />
