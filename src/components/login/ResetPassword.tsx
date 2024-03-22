@@ -24,7 +24,9 @@ const initialValues = {
   newPasswordRepeat: '',
 };
 
-const onSubmit = (values) => {
+type FormValues = typeof initialValues;
+
+const onSubmit = (values:FormValues) => {
   console.log(values);
 };
 

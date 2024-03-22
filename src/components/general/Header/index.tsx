@@ -9,7 +9,6 @@ import SignOut from './components/SignOut';
 function Header() {
   return (
     <>
-      {/* Yer tutucu */}
       <Desktop>
         <Auth>
           <SignOut />

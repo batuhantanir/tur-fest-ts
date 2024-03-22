@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
@@ -44,7 +43,6 @@ export default function Swip({ tourImage = [] }: SwipProps) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="w-full h-56 sm:h-[450px] relative rounded-sm"
       >
-        {/* {console.log(tourImage)} */}
         {(tourImage as string[])?.map((image, index) => (
           <SwiperSlide key={index}>
             <div className="">

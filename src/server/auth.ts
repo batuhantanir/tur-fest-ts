@@ -13,7 +13,8 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ token, session }) {
+    async session({ token, session }: any) {
+      console.log('session', token);
       if (token?.user) {
         session = token.user;
       }
