@@ -13,7 +13,7 @@ function Mobile() {
   const navbarRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [openNavbar, setOpenNavbar] = useState(true);
+  const [openNavbar, setOpenNavbar] = useState(false);
 
   const { logout, isAuthenticated } = useAuthStore();
   const isMobile = useMediaQuery('(max-width: 768px)');
