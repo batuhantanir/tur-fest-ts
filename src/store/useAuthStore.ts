@@ -3,16 +3,17 @@ import { produce } from 'immer';
 import { create } from 'zustand';
 
 type State = {
-  user: User | null
-  isAuthenticated: boolean
-  isLoading: boolean
-}
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  auth_token?: string | null;
+};
 
 type Actions = {
-  login: (user: User) => void
-  setLoading: (bool: Boolean) => void
-  logout: () => void
-}
+  login: (user: User) => void;
+  setLoading: (bool: Boolean) => void;
+  logout: () => void;
+};
 
 export const useAuthStore = create<State & Actions>((set) => ({
   user: null,
@@ -44,4 +45,3 @@ export const useAuthStore = create<State & Actions>((set) => ({
     );
   },
 }));
-

@@ -70,20 +70,19 @@ function Register() {
           surname: values.surname,
         }
       );
-    } catch (error) {}
-    // catch (error) {
-    //   let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-    //   if (
-    //     error.response &&
-    //     error.response.data &&
-    //     error.response.data.message
-    //   ) {
-    //     errorMessage = error.response.data.message;
-    //     setFieldError('mail', errorMessage);
-    //   } else {
-    //     setFieldError('mail', errorMessage);
-    //   }
-    // }
+    } catch (error: any) {
+      let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        errorMessage = error.response.data.message;
+        setFieldError('mail', errorMessage);
+      } else {
+        setFieldError('mail', errorMessage);
+      }
+    }
   };
 
   return (
