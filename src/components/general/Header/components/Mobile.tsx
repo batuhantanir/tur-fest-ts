@@ -7,9 +7,11 @@ import Hamburger from './Hamburger';
 import LinkButton from './LinkButton';
 import { useMediaQuery } from '@/lib/useMediaQuery';
 
-interface MobileProps {}
+interface MobileProps {
+  children: React.ReactNode;
+}
 
-function Mobile() {
+function Mobile({ children }: MobileProps) {
   const navbarRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,27 +76,8 @@ function Mobile() {
               ))}
             </nav>
             {!isLoading && (
-              <div className="flex flex-col items-start gap-3 px-5 mb-5 md:hidden ">
-                {isAuthenticated ? (
-                  ''
-                ) : (
-                  <>
-                    <LinkButton
-                      onClick={() => setOpenNavbar(false)}
-                      href="/profile"
-                    >
-                      Profil
-                    </LinkButton>
-                    <button
-                      onClick={() => {
-                        setOpenNavbar(false);
-                        logout();
-                      }}
-                    >
-                      Çıkış Yap
-                    </button>
-                  </>
-                )}
+              <div className="flex flex-col items-start gap-1 px-5 mb-5 md:hidden ">
+                {children}
               </div>
             )}
           </div>

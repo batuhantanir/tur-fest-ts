@@ -6,7 +6,7 @@ import service from '@/lib/axios';
 
 function Verify() {
   const params = useSearchParams();
-  console.log(params)
+  // console.log(params)
   const verifyToken = params.get('verify_token') || '';
   const router = useRouter();
   const [error, setError] = useState(false);

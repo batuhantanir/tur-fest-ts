@@ -425,13 +425,33 @@ function Tours() {
                   role="list"
                   className="pb-6 space-y-4 text-sm font-medium text-gray-900 border-b border-gray-200"
                 >
+                  {categoryIsLoading && (
+                    <>
+                      <Skeleton className="w-[90px] h-[20px] bg-gray-200 border-b py-2" />
+                      <Skeleton className="w-[90px] h-[20px] bg-gray-200 border-b py-2" />
+                      <Skeleton className="w-[90px] h-[20px] bg-gray-200 border-b py-2" />
+                    </>
+                  )}
+
                   {filters.map((category) => (
                     <li key={category.name}>
                       <a href={category.href}>{category.name}</a>
                     </li>
                   ))}
                 </ul>
-
+                {categoryIsLoading && (
+                  <div>
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div
+                        className="flex justify-between border-b py-6"
+                        key={i}
+                      >
+                        <Skeleton className="w-[12y0px] h-[20px] bg-gray-200" />
+                        <Skeleton className="w-[20px] h-[20px] bg-gray-200" />
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {filters.map((section) => (
                   <Disclosure
                     as="div"

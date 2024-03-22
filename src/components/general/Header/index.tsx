@@ -15,7 +15,11 @@ function Header() {
           <SignOut />
         </Auth>
       </Desktop>
-      <Mobile />
+      <Mobile>
+        <Auth>
+          <SignOut />
+        </Auth>
+      </Mobile>
     </>
   );
 }

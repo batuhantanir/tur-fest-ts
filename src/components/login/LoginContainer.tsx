@@ -5,9 +5,16 @@ interface Props {
   title: string;
   titleIcon?: React.ReactNode;
   description: string;
+  descriptionClass?: string;
 }
 
-function LoginContainer({ children, title, titleIcon, description }: Props) {
+function LoginContainer({
+  children,
+  title,
+  titleIcon,
+  description,
+  descriptionClass,
+}: Props) {
   return (
     <div className="bg-layoutColor flex items-center justify-center w-full">
       <div className=" w-[96%] bg-transparent rounded-md min-w-[300px] sm:w-[70%] max-w-[450px] flex flex-col items-center py-8 2xl: md:px-[30px] px-[20px]">
@@ -16,7 +23,9 @@ function LoginContainer({ children, title, titleIcon, description }: Props) {
             {title && <span>{title}</span>}
             {titleIcon && <span>{titleIcon}</span>}
           </h1>
-          <p className="text-black ">{description}</p>
+          <p className={descriptionClass ? descriptionClass : 'text-black '}>
+            {description}
+          </p>
         </div>
         {children}
       </div>

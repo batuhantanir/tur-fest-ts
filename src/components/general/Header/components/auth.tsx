@@ -15,27 +15,36 @@ interface AuthProps {
 }
 
 async function Auth({ children }: AuthProps) {
-  const authSession = await getServerAuthSession();
-    console.log(authSession);
+  const authSession: any = await getServerAuthSession();
+  // console.log('asdasd', authSession);
+
+  const className =
+    'hover:bg-transparent hover:text-gray-200 text-xl font-bold ml-[16px] md:font-medium md:text-sm  md:hover:text-accent-foreground  md:px-5 md:py-1 md:text-center md:hover:bg-black/5';
   return (
     <>
       {!authSession?.user ? (
         <>
-          <Link href={'/login'}>
-            <Button variant={'ghost'}>Giriş yap</Button>
+          <Link href="/login">
+            <Button className={className} variant={'ghost'}>
+              Giriş yap
+            </Button>
           </Link>
           <Link href={'/register'}>
-            <Button variant={'ghost'}>Üye ol</Button>
+            <Button className={className} variant={'ghost'}>
+              Üye ol
+            </Button>
           </Link>
         </>
       ) : (
         <>
           <Popover>
-            <PopoverTrigger>
-              <FaRegCircleUser size={22} />
-              {/* <span>{userName}</span> */}
+            <PopoverTrigger className="hidden md:flex items-center gap-2">
+              <FaRegCircleUser size={22} stroke='1.5' />
+              <span className="font-semibold text-lg first-letter:uppercase">
+                {authSession.user.name}
+              </span>
             </PopoverTrigger>
-            <PopoverContent className="p-0 py-2 w-fit ">
+            <PopoverContent className="hidden md:block p-0 py-2 w-fit ">
               <LinkButton
                 className="px-5 py-1 text-center hover:bg-black/5"
                 href="/settings/account"
@@ -51,6 +60,8 @@ async function Auth({ children }: AuthProps) {
               {children}
             </PopoverContent>
           </Popover>
+          <LinkButton className='block md:hidden' href="/settings">Ayarlar</LinkButton>
+          <div className="block md:hidden">{children}</div>
         </>
       )}
     </>

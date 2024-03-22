@@ -26,20 +26,20 @@ function Desktop({ children }: any) {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  const scrollPoint = isMobile ? 55 : 55;
+  const scrollPoint = isMobile ? 55 : 115;
   return (
     <>
-      {scrollY > scrollPoint && (
+      {pathname != '/' && (
         <div className={'h-[74.75px] md:h-[114.75px]'}></div>
       )}
 
       <header
         className={cn(
-          'w-full transition-all duration-200 fixed top-0  z-[40] text-white bg-transparent',
+          'w-full transition-all duration-200  fixed top-0  z-[40] text-white bg-transparent',
           {
-            ' shadow-black drop-shadow-md bg-white text-black':
+            ' shadow-black drop-shadow-md bg-white text-black ':
               scrollY > scrollPoint,
-            'bg-white text-black': pathname != '/',
+            'bg-white text-black ': pathname != '/',
           }
         )}
       >
