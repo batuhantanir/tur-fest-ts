@@ -38,7 +38,7 @@ const initialValues = {
 };
 
 const onSubmit = (values: Values) => {
-  console.log(values);
+  // console.log(values);
 };
 
 function ResetPassword() {

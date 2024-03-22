@@ -166,7 +166,7 @@ function Tours() {
 
   useEffect(() => {
     filters.map((item) => {
-      console.log(item);
+      // console.log(item);
     });
   }, [filters]);
 

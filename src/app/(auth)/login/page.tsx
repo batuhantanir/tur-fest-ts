@@ -32,14 +32,17 @@ const Login = ({}) => {
   const [showPassword, setShowPassword] = useState(false);
   const search = useSearchParams();
 
-  const onSubmit = (values: SubmitValues) => {
+  const onSubmit = async(values: SubmitValues) => {
     const updateValues = { email: values.mail, password: values.password };
-    signIn('credentials', {
+    const res = await signIn('credentials', {
       email: updateValues.email,
       password: updateValues.password,
       redirect: true,
       callbackUrl: search?.get('callbackUrl') || '/',
     });
+    if (res?.error) {
+      console.error(res.error);
+    }
   };
 
   const handleShowPassword = () => {

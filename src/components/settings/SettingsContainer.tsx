@@ -1,10 +1,10 @@
-'use client';
-import { useMediaQuery } from '@/lib/useMediaQuery';
+'server-only';
 import Link from 'next/link';
 import { BsKeyFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa6';
 import { IoIosArrowForward } from 'react-icons/io';
 import { IoLogOutOutline, IoTicketSharp } from 'react-icons/io5';
+import { getServerAuthSession } from '@/server/auth';
 
 const data = [
   {
@@ -26,18 +26,22 @@ const data = [
 
 interface Props {
   children?: React.ReactNode;
+  username?: string;
 }
 
-function SettingsContainer({ children }: Props) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
-
+async function SettingsContainer({ children, username }: Props) {
   return (
     <div className="px-5 pb-20">
       <div className="flex flex-col md:flex-row md:flex py-10 gap-[150px] md:gap-5 md:container md:mx-auto">
-        <div className="md:w-1/3 h-[300px] border rounded-xl border-[#CFD4DA]">
+        <div className="hidden md:block md:w-1/3 h-[300px] border rounded-xl border-[#CFD4DA]">
           <div className="flex w-full h-[28%] border-[#CFD4DA]">
             <div className="flex items-center justify-center px-6">
-              <h1 className="text-sm md:text-base">Hoşgeldiniz Emir</h1>
+              <h2 className="text-sm md:text-base flex gap-1">
+                <span>Hoşgeldiniz</span>
+                {username && (
+                  <span className="first-letter:uppercase">{username}</span>
+                )}
+              </h2>
             </div>
           </div>
           {data.map((item, index) => (
@@ -72,11 +76,9 @@ function SettingsContainer({ children }: Props) {
             </div>
           </div>
         </div>
-        {!isMobile && (
-          <div className="md:w-2/3 border rounded-xl border-[#CFD4DA]">
-            {children}
-          </div>
-        )}
+        <div className="hidden md:block md:w-2/3 md:border rounded-xl border-[#CFD4DA]">
+          {children}
+        </div>
       </div>
     </div>
   );

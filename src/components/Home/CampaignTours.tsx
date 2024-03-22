@@ -15,7 +15,7 @@ function CampaignTours() {
         setData(res.data.data?.tours || []);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
 

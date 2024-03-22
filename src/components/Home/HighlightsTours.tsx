@@ -15,7 +15,7 @@ function HighlightsTours() {
         setData(res.data.data?.tours || []);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
 
@@ -26,7 +26,7 @@ function HighlightsTours() {
       </h1>
       <div className="flex flex-wrap items-center justify-center gap-8 ">
         {(data.length == 0 ? Array(3).fill({}) : data).map((item, index) => {
-          console.log(item);
+          // console.log(item);
           return (
             <>
               {item?.name ? (
