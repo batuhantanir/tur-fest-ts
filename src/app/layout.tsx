@@ -43,12 +43,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <Header />
         <main className="flex flex-col flex-1">{children}</main>
-        {/* <Footer /> */}
-        {/* <div className="fixed bottom-3 flex justify-between w-full px-3 z-[90]">
+        <Footer />
+        <div className="fixed bottom-3 flex justify-between w-full px-3 z-[90]">
           <WhatsappButton />
           <PhoneButton />
         </div>
-        <ClickToGoUp /> */}
+        <ClickToGoUp />
       </body>
     </html>
   );

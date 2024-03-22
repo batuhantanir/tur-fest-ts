@@ -9,6 +9,8 @@ async function authenticate(email: string, password: string) {
     email: email,
     password: password,
   });
-  if (response.status !== 200) return null;
+  if (response.status !== 200) {
+    throw new Error('Invalid credentials');
+  };
   return response.data.data;
 }

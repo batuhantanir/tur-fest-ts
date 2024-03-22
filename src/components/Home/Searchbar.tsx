@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -35,6 +36,8 @@ import { Building2Icon, GlobeIcon, SearchIcon, UserIcon } from 'lucide-react';
 import { LuCalendar, LuLocate } from 'react-icons/lu';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
+import { useEffect, useState } from 'react';
+import service from '@/lib/axios';
 
 export default function Component() {
   return (
@@ -60,14 +63,14 @@ export default function Component() {
   );
 }
 
-const cities = [
-  { label: 'Adana', value: 'adana' },
-  { label: 'Ankara', value: 'ankara' },
-  { label: 'Istanbul', value: 'istanbul' },
-  { label: 'Izmir', value: 'izmir' },
-  { label: 'Antalya', value: 'antalya' },
-  // Add more cities here
-] as const;
+// const cities = [
+//   { label: 'Adana', value: 'adana' },
+//   { label: 'Ankara', value: 'ankara' },
+//   { label: 'Istanbul', value: 'istanbul' },
+//   { label: 'Izmir', value: 'izmir' },
+//   { label: 'Antalya', value: 'antalya' },
+//   // Add more cities here
+// ] as const;
 
 const FormSchema = z.object({
   city: z.string({
@@ -78,13 +81,41 @@ const FormSchema = z.object({
   }),
 });
 
+export type Cities = Array<{ label: string; value: string }>;
+
 export function ComboboxForm() {
+  const [cities, setCities] = useState<Cities>([
+    { label: 'Adana', value: 'adana' },
+    { label: 'Ankara', value: 'ankara' },
+    { label: 'Istanbul', value: 'istanbul' },
+    { label: 'Izmir', value: 'izmir' },
+    { label: 'Antalya', value: 'antalya' },
+  ]);
+
+  useEffect(() => {
+    service
+      .get('search/cities')
+      .then((res) => {
+        setCities(
+          res.data.data.cities.map((city: any) => ({
+            label: city.city,
+            value: city.city.toLowerCase(),
+          }))
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  console.log(cities);
+  const { push } = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-   console.log(data)
+    push(`/tours?city=${data.city}&month=${data.month}`);
   }
 
   const months = [
@@ -126,7 +157,7 @@ export function ComboboxForm() {
                       )}
                     >
                       {field.value
-                        ? cities.find((city) => city.value === field.value)
+                        ? cities?.find((city) => city.value === field.value)
                             ?.label
                         : 'Şehir seçiniz...'}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />

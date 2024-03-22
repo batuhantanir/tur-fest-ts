@@ -1,16 +1,18 @@
 'use client';
 import { signOut } from 'next-auth/react';
+import LinkButton from './LinkButton';
 
 function SignOut() {
   return (
-    <button
-      className="px-5 py-1 text-center hover:bg-black/5"
+    <LinkButton
+      href="/"
+      className="-ml-[3px] md:-ml-0 md:px-5 md:py-1 md:text-center md:hover:bg-black/5"
       onClick={async () => {
         await signOut();
       }}
     >
-      Çıkış Yap
-    </button>
+      Çıkış yap
+    </LinkButton>
   );
 }
 

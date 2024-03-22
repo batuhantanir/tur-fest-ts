@@ -2,12 +2,11 @@
 import LoginContainer from '@/components/login/LoginContainer';
 import { loginDetails } from '@/constants/config';
 import { isLocal } from '@/constants/env';
-import service from '@/lib/axios';
 import { cn } from '@/lib/utils';
-import { getServerAuthSession } from '@/server/auth';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { IoEye, IoEyeOffSharp } from 'react-icons/io5';
 import * as Yup from 'yup';
@@ -29,16 +28,20 @@ interface SubmitValues {
   password: string;
 }
 
-const Login = () => {
+const Login = ({}) => {
   const [showPassword, setShowPassword] = useState(false);
+  const search = useSearchParams();
 
   const onSubmit = (values: SubmitValues) => {
     const updateValues = { email: values.mail, password: values.password };
     signIn('credentials', {
       email: updateValues.email,
       password: updateValues.password,
+      redirect: true,
+      callbackUrl: search?.get('callbackUrl') || '/',
     });
   };
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -46,7 +49,12 @@ const Login = () => {
   return (
     <LoginContainer
       title="Hoşgeldiniz"
-      description="Hesabınıza giriş yapın ve devam edin."
+      description={
+        search?.get('error')
+          ? 'E-posta veya şifreniz hatalı!'
+          : 'Hesabınıza giriş yapın ve devam edin.'
+      }
+      descriptionClass={search?.get('error') ? 'text-red-500' : ''}
     >
       <></>
       <Formik
