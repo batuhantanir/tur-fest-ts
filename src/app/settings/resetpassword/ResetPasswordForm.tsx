@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
 import { IoEye } from 'react-icons/io5';
 import { IoEyeOffSharp } from 'react-icons/io5';
-import { TurnBack } from '../reservations/page';
+import TurnBack from '../TurnBack';
 
 const validationSchema = Yup.object({
   password: Yup.string().required('Bu alan zorunludur'),

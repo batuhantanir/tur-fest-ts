@@ -1,20 +1,7 @@
 'server-only';
-import Link from 'next/link';
 import React from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
 import SettingsContainer from '@/components/settings/SettingsContainer';
-
-export const TurnBack = () => {
-  return (
-    <Link
-      href="/settings"
-      className="flex md:hidden items-center w-full justify-center py-2 cursor-pointer"
-    >
-      <IoIosArrowBack className="h-6 w-6 text-ilki" />
-      <span className=" text-ilki mr-2">Geri dön</span>
-    </Link>
-  );
-};
+import TurnBack from '../TurnBack';
 
 function Reservations() {
   return (

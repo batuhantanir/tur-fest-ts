@@ -4,7 +4,7 @@ import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
 import axios from 'axios';
-import { TurnBack } from '../reservations/page';
+import TurnBack from '../TurnBack';
 
 interface User {
   email: string;
