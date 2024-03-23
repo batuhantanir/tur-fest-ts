@@ -104,10 +104,10 @@ export function ComboboxForm() {
         );
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }, []);
-  console.log(cities);
+  // console.log(cities);
   const { push } = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({

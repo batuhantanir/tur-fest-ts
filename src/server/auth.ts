@@ -14,15 +14,11 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ token, session }: any) {
-      console.log('session', token);
+      // console.log('session', token);
       if (token?.user) {
         session = token.user;
       }
       return session;
-    },
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log('signIn', user);
-      return true;
     },
   },
   pages: {

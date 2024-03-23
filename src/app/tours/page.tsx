@@ -28,10 +28,8 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMediaQuery } from '@/lib/useMediaQuery';
+import { useMediaQuery } from '@uidotdev/usehooks';
 import { Skeleton } from '@/components/ui/skeleton';
-// import { whichMonth } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import service from '@/lib/axios';
 
 type SubCategory = {
@@ -166,7 +164,7 @@ function Tours() {
 
   useEffect(() => {
     filters.map((item) => {
-      console.log(item);
+      // console.log(item);
     });
   }, [filters]);
 
