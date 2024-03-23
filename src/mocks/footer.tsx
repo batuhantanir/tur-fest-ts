@@ -7,9 +7,9 @@ export const footerData = [
   {
     title: 'Kategoriler',
     links: [
-      { label: 'Marmara Turları', link: '#' },
-      { label: 'Anadolu Turları', link: '#' },
-      { label: 'Güney Doğu Anadolu Turları', link: '#' },
+      { label: 'Marmara Turları', link: '/tours' },
+      { label: 'Anadolu Turları', link: '/tours' },
+      { label: 'Güney Doğu Anadolu Turları', link: '/tours' },
     ],
   },
   {
@@ -18,7 +18,7 @@ export const footerData = [
       { label: 'Hakkımızda', link: '/hakkimizda' },
       { label: 'Hizmetlerimiz', link: '/hizmetlerimiz' },
       { label: 'İletişim', link: '/iletisim' },
-      { label: 'Gizlilik Politikası', link: '/gizlilik-politikası' },
+      { label: 'Gizlilik Politikası', link: '/gizlilik-politikasi' },
       {
         label: 'Bilgi Güvenliği Politikası',
         link: '/bilgi-guvenligi-politikasi',
