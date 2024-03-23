@@ -35,7 +35,7 @@ function Desktop({ children }: any) {
 
       <header
         className={cn(
-          'w-full transition-all duration-150  fixed top-0  z-[40] text-white bg-transparent',
+          'w-full  fixed top-0  z-[40] text-white bg-transparent',
           {
             ' shadow-black drop-shadow-md bg-white text-black ':
               scrollY > scrollPoint,
@@ -62,7 +62,7 @@ function Desktop({ children }: any) {
                 width={118}
                 height={45}
                 alt="Turfest Logo"
-                className="transition-all duration-150"
+                className=""
               />
             </Link>
             <div className="items-center hidden gap-3 md:flex ">
@@ -80,7 +80,7 @@ function Desktop({ children }: any) {
               <a
                 key={index}
                 className={twMerge(
-                  'relative hover:text-black after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black after:transition-all after:duration-150 ',
+                  'relative hover:text-black after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
                   `${
                     (typeof link.href == 'string'
                       ? pathname === link.href
