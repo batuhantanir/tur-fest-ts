@@ -12,7 +12,7 @@ import 'swiper/css/thumbs';
 // import required modules
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 
-import { useMediaQuery } from '@/lib/useMediaQuery';
+import { useMediaQuery } from '@uidotdev/usehooks';
 import { Swiper as ThumbSwip } from 'swiper/types';
 
 interface SwipProps {

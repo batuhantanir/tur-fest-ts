@@ -45,7 +45,7 @@ function Footer() {
         </div>
         <div className="flex justify-between gap-4 px-5 py-10">
           <p>{footerCopyRight}</p>
-          <div className="flex">
+          <div className="flex gap-2">
             {footerIconData.map((item, index) => (
               <Link
                 key={index}

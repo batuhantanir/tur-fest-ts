@@ -1,3 +1,4 @@
+"server-only"
 import React from 'react';
 import {
   Popover,
@@ -38,7 +39,7 @@ async function Auth({ children }: AuthProps) {
       ) : (
         <>
           <Popover>
-            <PopoverTrigger className="hidden md:flex items-center gap-2">
+            <PopoverTrigger className="hidden transition-colors duration-150 md:flex items-center gap-2">
               <FaRegCircleUser size={22} stroke='1.5' />
               <span className="font-semibold text-lg first-letter:uppercase">
                 {authSession.user.name}

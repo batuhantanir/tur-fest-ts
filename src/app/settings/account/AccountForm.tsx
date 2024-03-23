@@ -1,13 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
-import { IoIosArrowBack } from 'react-icons/io';
-import Link from 'next/link';
-import service from '@/lib/axios';
 import axios from 'axios';
-import { headers } from 'next/headers';
+import { TurnBack } from '../reservations/page';
 
 interface User {
   email: string;
@@ -77,10 +74,14 @@ function AccountForm({ token }: { token: string }) {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          <Form className="flex flex-col gap-5">
-            <Input title="Adınız" name="name" className="w-[63%]" />
-            <Input title="Soyadınız" name="surname" className="w-[63%]" />
-            <div className="space-y-2 w-[63%]">
+          <Form className="flex flex-col items-center md:items-start gap-5 w-full">
+            <Input title="Adınız" name="name" className="w-full md:w-[63%]" />
+            <Input
+              title="Soyadınız"
+              name="surname"
+              className="w-full md:w-[63%]"
+            />
+            <div className="space-y-2 w-full md:w-[63%]">
               <Input
                 title="E-posta Adresiniz"
                 name="email"
@@ -102,6 +103,7 @@ function AccountForm({ token }: { token: string }) {
           </Form>
         </Formik>
       )}
+      <TurnBack />
     </div>
   );
 }

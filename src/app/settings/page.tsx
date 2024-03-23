@@ -1,20 +1,13 @@
-'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import SettingsContainer from '@/components/settings/SettingsContainer';
-import { useMediaQuery } from '@/lib/useMediaQuery';
-import { useRouter } from 'next/navigation';
+import RedirectSettings from './RedirectSettings';
 
 function Page() {
-  const { push } = useRouter();
-  const isMobile = useMediaQuery('(max-width: 768px)');
-
-  useEffect(() => {
-    if (!isMobile) {
-      push('/settings/account');
-    }
-  }, [isMobile, push]);
-
-  return <SettingsContainer />;
+  return (
+    <RedirectSettings>
+      <SettingsContainer pathname='/settings' />
+    </RedirectSettings>
+  );
 }
 
 export default Page;

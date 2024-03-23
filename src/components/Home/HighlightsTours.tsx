@@ -26,13 +26,15 @@ function HighlightsTours() {
       </h1>
       <div className="flex flex-wrap items-center justify-center gap-8 ">
         {(data.length == 0 ? Array(3).fill({}) : data).map((item, index) => {
-          // console.log(item);
           return (
             <>
               {item?.name ? (
                 <ToursHorizontalCard key={index} item={item} />
               ) : (
-                <div className="bg-white flex flex-col justify-between rounded-md shadow-md transition-shadow hover:shadow-xl mx-5 sm:mx-0 min-w-[305px] w-[335px] min-h-[512px]">
+                <div
+                  key={index}
+                  className="bg-white flex flex-col justify-between rounded-md shadow-md transition-shadow hover:shadow-xl mx-5 sm:mx-0 min-w-[305px] w-[335px] min-h-[512px]"
+                >
                   <div className="w-full h-52">
                     <Skeleton className="rounded-t-md w-full h-full" />
                   </div>
