@@ -224,7 +224,7 @@ export function ComboboxForm() {
                     >
                       {field.value
                         ? months[Number(field.value)]
-                        : 'Şehir seçiniz...'}
+                        : 'Ay seçiniz...'}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
