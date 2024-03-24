@@ -46,7 +46,7 @@ function Mobile({ children }: MobileProps) {
   }, []);
 
   return (
-    <>
+    <div>
       {isMobile && (
         <>
           <Hamburger
@@ -91,7 +91,7 @@ function Mobile({ children }: MobileProps) {
           ></div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

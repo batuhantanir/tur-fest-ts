@@ -41,7 +41,7 @@ import service from '@/lib/axios';
 
 export default function Component() {
   return (
-    <div className="flex justify-center relative w-full h-fit mt-[90px] md:mt-0 md:h-[800px]">
+    <div className="flex justify-center relative w-full h-fit mt-[75px] md:mt-0 md:h-[800px]">
       <div
         className="relative w-full flex items-center justify-start h-full"
         style={{

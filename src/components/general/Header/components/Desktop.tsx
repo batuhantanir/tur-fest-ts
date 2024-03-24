@@ -29,10 +29,7 @@ function Desktop({ children }: any) {
   const scrollPoint = isMobile ? 55 : 115;
   return (
     <>
-      {pathname != '/' && (
-        <div className={'h-[74.75px] md:h-[114.75px]'}></div>
-      )}
-
+      {pathname != '/' && <div className={'h-[74.75px] md:h-[114.75px]'}></div>}
       <header
         className={cn(
           'w-full transition-all duration-150  fixed top-0  z-[40] text-white bg-transparent',

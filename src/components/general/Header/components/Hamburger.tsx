@@ -31,7 +31,7 @@ function Hamburger({
       ref={hamburgerRef}
       onClick={() => setOpenNavbar(!openNavbar)}
       id="nav-icon2"
-      className={`block  md:hidden z-[10000] fixed  left-0 ${
+      className={`block  md:hidden z-[10000] fixed top-1  left-0 ${
         openNavbar && 'open'
       }`}
     >
