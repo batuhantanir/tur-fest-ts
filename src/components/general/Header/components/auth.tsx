@@ -20,7 +20,7 @@ async function Auth({ children }: AuthProps) {
   // console.log('asdasd', authSession);
 
   const className =
-    'hover:bg-transparent hover:text-gray-200 text-xl font-bold ml-[16px] md:font-medium md:text-sm  md:hover:text-accent-foreground  md:px-5 md:py-1 md:text-center md:hover:bg-black/5';
+    'hover:bg-transparent hover:text-gray-200 py-0 text-xl font-bold ml-[19px] md:ml-2 md:font-medium md:text-sm  md:hover:text-accent-foreground  md:px-5 md:py-1 md:text-center md:hover:bg-black/5';
   return (
     <>
       {!authSession?.user ? (

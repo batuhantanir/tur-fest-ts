@@ -31,14 +31,11 @@ function Desktop({ children }: any) {
     <>
       {pathname != '/' && <div className={'h-[74.75px] md:h-[114.75px]'}></div>}
       <header
-        className={cn(
-          'w-full  fixed top-0  z-[40] text-white bg-transparent',
-          {
-            ' shadow-black drop-shadow-md bg-white text-black ':
-              scrollY > scrollPoint,
-            'bg-white text-black ': pathname != '/',
-          }
-        )}
+        className={cn('w-full  fixed top-0  z-[40] text-white bg-transparent', {
+          ' shadow-black drop-shadow-md bg-white text-black ':
+            scrollY > scrollPoint,
+          'bg-white text-black ': pathname != '/',
+        })}
       >
         <div className={`bg-transparent w-full md:container md:mx-auto `}>
           <div
@@ -64,7 +61,10 @@ function Desktop({ children }: any) {
             </Link>
             <div className="items-center hidden gap-3 md:flex ">
               <Link href={'tel:+9005059956402'}>
-                <Button variant={'ghost'}>
+                <Button
+                  className="hover:bg-black/5 text-center hover:text-accent-foreground"
+                  variant={'ghost'}
+                >
                   <PhoneIcon className="w-4 h-4 mr-2" />
                   0505 995 64 02
                 </Button>
@@ -77,7 +77,7 @@ function Desktop({ children }: any) {
               <a
                 key={index}
                 className={twMerge(
-                  'relative hover:text-black after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
+                  'relative hover:text-black transition-all duration-300 after:transition-all after:duration-300 after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
                   `${
                     (typeof link.href == 'string'
                       ? pathname === link.href
@@ -86,8 +86,8 @@ function Desktop({ children }: any) {
                   }`,
                   pathname == '/' &&
                     (scrollY > scrollPoint
-                      ? 'hover:text-black '
-                      : 'text-white hover:text-white/80 after:bg-white ')
+                      ? 'hover:text-black'
+                      : 'text-white hover:text-white/80 after:bg-white')
                 )}
                 href={typeof link.href == 'string' ? link.href : link.href[0]}
               >

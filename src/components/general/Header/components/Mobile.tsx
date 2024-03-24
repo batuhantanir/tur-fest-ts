@@ -76,7 +76,7 @@ function Mobile({ children }: MobileProps) {
               ))}
             </nav>
             {!isLoading && (
-              <div className="flex flex-col items-start gap-1 px-5 mb-5 md:hidden ">
+              <div className="flex flex-col items-start px-5 md:hidden ">
                 {children}
               </div>
             )}

@@ -24,7 +24,7 @@ function CstAccordion({ tour_plan }: CstAccordionProps) {
         {tour_plan.map((item, index) => (
           <AccordionItem key={index} value={(index + 1).toString()}>
             <AccordionTrigger>
-              <div>
+              <div className="text-left">
                 <span>{index + 1 + '. GÜN: '}</span>
                 <span className="font-normal">
                   {convertKeywordsToString(item.keywords)}
