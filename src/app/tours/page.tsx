@@ -307,8 +307,8 @@ function Tours() {
                       role="list"
                       className="px-2 py-3 font-medium text-gray-900"
                     >
-                      {filters.map((category: any) => (
-                        <CategoryButton category={category} />
+                      {filters.map((category: any,index:number) => (
+                        <CategoryButton key={index} category={category} />
                       ))}
                     </ul>
 
