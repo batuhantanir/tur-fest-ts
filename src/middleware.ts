@@ -8,7 +8,8 @@ export default withAuth(
     const isAuth = !!token;
     const isAuthPage =
       req.nextUrl.pathname.startsWith('/login') ||
-      req.nextUrl.pathname.startsWith('/register');
+      req.nextUrl.pathname.startsWith('/register') ||
+      req.nextUrl.pathname.startsWith('/email');
     const isApiPage = req.nextUrl.pathname.startsWith('/api');
 
     if (isAuthPage) {
@@ -49,5 +50,12 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/settings', '/settings/:path*', '/login', '/register', '/api'],
+  matcher: [
+    '/settings',
+    '/settings/:path*',
+    '/login',
+    '/register',
+    '/api',
+    '/email',
+  ],
 };

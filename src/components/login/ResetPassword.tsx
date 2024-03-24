@@ -8,37 +8,61 @@ import { twMerge } from 'tailwind-merge';
 import * as Yup from 'yup';
 import Link from 'next/link';
 import { IoIosArrowBack } from 'react-icons/io';
+import service from '@/lib/axios';
+import { useRouter } from 'next/navigation';
 
 const validationSchema = Yup.object({
-  mail: Yup.string()
+  newpassword: Yup.string()
     .required('Bu alan zorunludur')
-    .matches(
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      'Geçerli bir e-posta adresi giriniz'
-    ),
-  password: Yup.string().required('Bu alan zorunludur'),
+    .matches(/[A-Z]/, 'En az bir büyük harf içermelidir')
+    .matches(/[a-z]/, 'En az bir küçük harf içermelidir')
+    .matches(/\d/, 'En az bir rakam içermelidir')
+    .matches(/[\W_]/, 'En az bir noktalama işareti içermelidir')
+    .min(8, 'Şifreniz en az 8 karakter olmalı')
+    .max(20, 'Şifreniz en fazla 20 karakter olmalı'),
+  newpasswordAgain: Yup.string()
+    .required('Bu alan zorunludur')
+    .oneOf([Yup.ref('newpassword')], 'Şifreler eşleşmiyor'),
 });
 
 const initialValues = {
-  newPassword: '',
-  newPasswordRepeat: '',
+  newpassword: '',
+  newpasswordAgain: '',
 };
 
 type FormValues = typeof initialValues;
 
-const onSubmit = (values:FormValues) => {
-  console.log(values);
-};
-
-function ResetPassword() {
+function ResetPassword({ resetToken }: { resetToken: string }) {
+  const { push } = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isSuccess, setIsSuccess] = useState<boolean | string>(false);
+  const [isError, setIsError] = useState<boolean | any>(false);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
   const handleShowNewPassword = () => {
     setShowNewPassword(!showNewPassword);
+  };
+
+  const onSubmit = (values: FormValues) => {
+    service
+      .put('/users/reset-password', {
+        password: values.newpassword,
+        token: resetToken,
+      })
+      .then((res) => {
+        setIsSuccess(res.data.message);
+        setIsError(false);
+        setTimeout(() => {
+          push('/login');
+        }, 2000);
+      })
+      .catch((err) => {
+        setIsError(err.response.data);
+        setIsSuccess(false);
+      });
   };
 
   return (
@@ -53,20 +77,30 @@ function ResetPassword() {
       >
         {(props) => (
           <Form className="flex flex-col gap-4 w-full">
+            {isError && (
+              <div className="bg-red-500 text-white p-2 rounded-md">
+                {isError?.message}
+              </div>
+            )}
+            {isSuccess && (
+              <div className="bg-green-500 text-white p-2 rounded-md">
+                {isSuccess} Giriş Sayfasına yönleniyorsunuz...
+              </div>
+            )}
             <div className="relative group">
               <label
-                htmlFor="newPassword"
+                htmlFor="newpassword"
                 className={twMerge(`absolute left-4 top-3 select-none text-gray-400 group-focus-within:top-[-6px]
                                 group-focus-within:px-1 group-focus-within:left-[13px] group-focus-within:text-xs
                                 ${
-                                  props.errors.newPassword &&
-                                  props.touched.newPassword
+                                  props.errors.newpassword &&
+                                  props.touched.newpassword
                                     ? 'group-focus-within:text-cst-primary text-cst-primary'
                                     : 'group-focus-within:text-ilki text-gray-400'
                                 }
                                  group-focus-within:bg-white transition-all duration-200
                                 ${
-                                  props.values.newPassword.length >= 1
+                                  props.values.newpassword.length >= 1
                                     ? 'top-[-6px] text-xs px-1 left-[13px]  bg-white'
                                     : 'text-base'
                                 }`)}
@@ -76,15 +110,15 @@ function ResetPassword() {
               <Field
                 className={twMerge(`w-full border rounded-md h-[50px] text-darkGray border-darkGray px-4 pr-10 focus:border-[2px] focus:ring-0 focus:outline-none
                                         ${
-                                          props.touched.newPassword &&
-                                          props.errors.newPassword
+                                          props.touched.newpassword &&
+                                          props.errors.newpassword
                                             ? 'border-cst-primary focus:border-cst-primary border-[2px]'
                                             : 'focus:border-ilki'
                                         }`)}
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="off"
-                id="newPassword"
-                name="newPassword"
+                id="newpassword"
+                name="newpassword"
               />
               <div
                 className="absolute right-4 top-[26px] transfrom -translate-y-1/2  text-lightGray cursor-pointer"
@@ -97,25 +131,25 @@ function ResetPassword() {
                 )}
               </div>
               <ErrorMessage
-                name="newPassword"
+                name="newpassword"
                 component="div"
                 className="text-cst-primary"
               />
             </div>
             <div className="relative group">
               <label
-                htmlFor="newPasswordRepeat"
+                htmlFor="newpasswordAgain"
                 className={twMerge(`absolute left-4 top-3 select-none text-gray-400 group-focus-within:top-[-6px]
                                 group-focus-within:px-1 group-focus-within:left-[13px] group-focus-within:text-xs
                                 ${
-                                  props.errors.newPasswordRepeat &&
-                                  props.touched.newPasswordRepeat
+                                  props.errors.newpasswordAgain &&
+                                  props.touched.newpasswordAgain
                                     ? 'group-focus-within:text-cst-primary text-cst-primary'
                                     : 'group-focus-within:text-ilki text-gray-400'
                                 }
                                  group-focus-within:bg-white transition-all duration-200
                                 ${
-                                  props.values.newPasswordRepeat.length >= 1
+                                  props.values.newpasswordAgain.length >= 1
                                     ? 'top-[-6px] text-xs px-1 left-[13px]  bg-white'
                                     : 'text-base'
                                 }`)}
@@ -125,15 +159,15 @@ function ResetPassword() {
               <Field
                 className={twMerge(`w-full border rounded-md h-[50px] text-darkGray border-darkGray px-4 pr-10 focus:border-[2px] focus:ring-0 focus:outline-none
                                         ${
-                                          props.touched.newPasswordRepeat &&
-                                          props.errors.newPasswordRepeat
+                                          props.touched.newpasswordAgain &&
+                                          props.errors.newpasswordAgain
                                             ? 'border-cst-primary focus:border-cst-primary border-[2px]'
                                             : 'focus:border-ilki'
                                         }`)}
                 type={showNewPassword ? 'text' : 'password'}
                 autoComplete="off"
-                id="newPasswordRepeat"
-                name="newPasswordRepeat"
+                id="newpasswordAgain"
+                name="newpasswordAgain"
               />
               <div
                 className="absolute right-4 top-[26px] transfrom -translate-y-1/2  text-lightGray cursor-pointer"
@@ -146,7 +180,7 @@ function ResetPassword() {
                 )}
               </div>
               <ErrorMessage
-                name="newPasswordRepeat"
+                name="newpasswordAgain"
                 component="div"
                 className="text-cst-primary"
               />

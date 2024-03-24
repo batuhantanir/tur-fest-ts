@@ -19,7 +19,19 @@ function TourInformation({ tour }: TourInformationProps) {
   const tourTime = timeStamp(tour.begin_date, tour.end_date);
   return (
     <div className="flex flex-col justify-between gap-3 w-full lg:w-2/5 min-h-full">
-      <h3 className="font-semibold text-base md:text-xl">{tour.name}</h3>
+      <div className="font-semibold text-base md:text-xl">
+        <h3>{tour.name}</h3>
+        <div className="font-normal text-sm md:text-base">
+          {Intl.DateTimeFormat('tr', { dateStyle: 'long' }).format(
+            new Date(tour.begin_date)
+          )}{' '}
+          -{' '}
+          {Intl.DateTimeFormat('tr', { dateStyle: 'long' }).format(
+            new Date(tour.end_date)
+          )}
+        </div>
+      </div>
+
       <p className="flex-1 line-clamp-[9]">{tour.description}</p>
       <div className="flex space-x-1.5 font-semibold">
         <span>Fiyat:</span>

@@ -31,6 +31,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { Skeleton } from '@/components/ui/skeleton';
 import service from '@/lib/axios';
+import { cn } from '@/lib/utils';
 
 type SubCategory = {
   _id: string;
@@ -84,7 +85,7 @@ function Tours() {
   const [totalProductsCount, setTotalProductsCount] = useState<Number | null>(
     null
   );
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState<any>([]);
   const searchParams = useSearchParams();
   const limit = Number(searchParams.get('limit'))
     ? Number(searchParams.get('limit'))
@@ -100,21 +101,21 @@ function Tours() {
     .join('&');
 
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, refresh } = useRouter();
 
-  const handleSearch = useCallback((query: any, term: any) => {
+  const handleSearch = (query: any, term: any) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
-      params.set(query, term.toString());
+      params.set(query, term);
     } else {
       params.delete(query);
     }
     params.delete('offset');
     params.delete('limit');
     replace(`${pathname}?${params}`);
-  }, []);
+  };
 
-  useEffect(() => {
+  const fetchProducts = () => {
     service
       .get(
         `/tours/list?limit=${limit}&offset=${offset}${
@@ -132,6 +133,10 @@ function Tours() {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, [sortOptionsName]);
 
   useEffect(() => {
@@ -163,10 +168,17 @@ function Tours() {
   }, []);
 
   useEffect(() => {
-    filters.map((item) => {
-      // console.log(item);
+    filters.map((item: any) => {
+      item.sub_categories.map((sub_item: any) => {
+        if (
+          searchParams.get('sub_category') &&
+          searchParams.get('sub_category')?.includes(sub_item.id)
+        ) {
+          sub_item.checked = true;
+        }
+      });
     });
-  }, [filters]);
+  }, [products]);
 
   const sortOptionChange = ({ option }: { option: any }) => {
     sortOptions.map((item) => {
@@ -178,6 +190,67 @@ function Tours() {
         item.current = false;
       }
     });
+  };
+
+  const HandleFilter = () => {
+    return (
+      <div className="flex justify-center">
+        <button
+          className="bg-cst-secondary/95 text-white font-medium py-2 w-[90%] rounded-lg my-5 hover:bg-cst-secondary/85 transition-colors duration-300 ease-in-out"
+          type="button"
+          onClick={() => {
+            let sub_categories = '';
+            filters.map((item: any) => {
+              item.sub_categories &&
+                item.sub_categories.map((sub_item: any) => {
+                  if (sub_item.checked) {
+                    sub_categories += `${sub_item.id},`;
+                  }
+                });
+            });
+            console.log(sub_categories);
+            if (sub_categories.length > 0) {
+              handleSearch('sub_category', sub_categories);
+            } else {
+              handleSearch('sub_category', 0);
+            }
+            fetchProducts();
+          }}
+        >
+          Filtrele
+        </button>
+      </div>
+    );
+  };
+
+  const CategoryButton = ({ category }: { category: any }) => {
+    return (
+      <li className="flex justify-between items-center">
+        <button
+          type="button"
+          onClick={() => {
+            handleSearch('category', category.id);
+          }}
+          className="block px-2 py-3 font-medium text-gray-900"
+        >
+          {category.name}
+        </button>
+        <button
+          className={cn(
+            `text-red-500 hidden mr-5 text-xl border border-red-500 hover:text-white hover:bg-red-500 active:scale-95 transition-all duration-150 w-8 h-8 rounded-full `,
+            {
+              block: category.id == searchParams.get('category'),
+            }
+          )}
+          type="button"
+          onClick={() => {
+            handleSearch('category', 0);
+          }}
+        >
+          x
+        </button>
+      </li>
+    );
   };
 
   return (
@@ -234,16 +307,12 @@ function Tours() {
                       role="list"
                       className="px-2 py-3 font-medium text-gray-900"
                     >
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
+                      {filters.map((category: any) => (
+                        <CategoryButton category={category} />
                       ))}
                     </ul>
 
-                    {filters.map((section:any) => (
+                    {filters.map((section: any) => (
                       <Disclosure
                         as="div"
                         key={section.id}
@@ -274,24 +343,55 @@ function Tours() {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.sub_categories.map(
-                                  (option:any, optionIdx:any) => (
+                                  (option: any, optionIdx: any) => (
                                     <div
                                       key={option.value}
                                       className="flex items-center"
                                     >
                                       <input
-                                        id={`filter - mobile - ${section.id} - ${optionIdx}`}
-                                        name={`${section.id}[]`}
+                                        id={`filter-${section.id}-${optionIdx}`}
+                                        name={`${option.id}`}
                                         defaultValue={option.value}
+                                        onChange={(e) => {
+                                          const updatedOptions =
+                                            section.sub_categories.map(
+                                              (opt: any, idx: any) => {
+                                                if (idx === optionIdx) {
+                                                  return {
+                                                    ...opt,
+                                                    checked: e.target.checked,
+                                                  };
+                                                }
+                                                return opt;
+                                              }
+                                            );
+                                          setFilters((prev: any) =>
+                                            prev.map((prev: any) =>
+                                              prev.id === section.id
+                                                ? {
+                                                    ...prev,
+                                                    sub_categories:
+                                                      updatedOptions,
+                                                  }
+                                                : prev
+                                            )
+                                          );
+                                          console.log(
+                                            filters[0].sub_categories[0]
+                                          );
+                                        }}
+                                        checked={option.checked}
                                         type="checkbox"
                                         defaultChecked={option.checked}
                                         className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                       />
                                       <label
-                                        htmlFor={`filter - mobile - ${section.id} - ${optionIdx}`}
-                                        className="flex-1 min-w-0 ml-3 text-gray-500"
+                                        htmlFor={`filter-${section.id}-${optionIdx}`}
+                                        className="ml-3 text-sm text-gray-600"
                                       >
-                                        {option.label}
+                                        {option.name}
+                                        {option.total_tours &&
+                                          `(${option.total_tours})`}
                                       </label>
                                     </div>
                                   )
@@ -302,6 +402,7 @@ function Tours() {
                         )}
                       </Disclosure>
                     ))}
+                    <HandleFilter />
                   </form>
                 </Dialog.Panel>
               </Transition.Child>
@@ -385,7 +486,7 @@ function Tours() {
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
-              <form className="hidden lg:block">
+              <form className="hidden lg:block overflow-y-auto max-h-screen">
                 <h3 className="sr-only">Categories</h3>
                 <ul
                   role="list"
@@ -399,10 +500,8 @@ function Tours() {
                     </>
                   )}
 
-                  {filters.map((category: any) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
+                  {filters.map((category: any, index: number) => (
+                    <CategoryButton key={index} category={category} />
                   ))}
                 </ul>
                 {categoryIsLoading && (
@@ -418,7 +517,7 @@ function Tours() {
                     ))}
                   </div>
                 )}
-                {filters.map((section: any) => (
+                {filters.map((section: any, sectionidx: number) => (
                   <Disclosure
                     as="div"
                     key={section.id}
@@ -448,22 +547,48 @@ function Tours() {
                         </h3>
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-4">
-                            {section.sub_categories.map(
+                            {section?.sub_categories.map(
                               (option: any, optionIdx: any) => (
                                 <div
                                   key={option.value}
-                                  className="flex items-center"
+                                  className="flex items-center mx-2"
                                 >
                                   <input
-                                    id={`filter - ${section.id} - ${optionIdx}`}
-                                    name={`${section.id}[]`}
+                                    id={`filter-${section.id}-${optionIdx}`}
+                                    name={`${option.id}`}
                                     defaultValue={option.value}
+                                    onChange={(e) => {
+                                      const updatedOptions =
+                                        section.sub_categories.map(
+                                          (opt: any, idx: any) => {
+                                            if (idx === optionIdx) {
+                                              return {
+                                                ...opt,
+                                                checked: e.target.checked,
+                                              };
+                                            }
+                                            return opt;
+                                          }
+                                        );
+                                      setFilters((prev: any) =>
+                                        prev.map((prev: any) =>
+                                          prev.id === section.id
+                                            ? {
+                                                ...prev,
+                                                sub_categories: updatedOptions,
+                                              }
+                                            : prev
+                                        )
+                                      );
+                                      console.log(filters[0].sub_categories[0]);
+                                    }}
+                                    checked={option.checked}
                                     type="checkbox"
                                     defaultChecked={option.checked}
                                     className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                   />
                                   <label
-                                    htmlFor={`filter - ${section.id} - ${optionIdx}`}
+                                    htmlFor={`filter-${section.id}-${optionIdx}`}
                                     className="ml-3 text-sm text-gray-600"
                                   >
                                     {option.name}
@@ -479,6 +604,7 @@ function Tours() {
                     )}
                   </Disclosure>
                 ))}
+                <HandleFilter />
               </form>
 
               {/* Product grid */}
