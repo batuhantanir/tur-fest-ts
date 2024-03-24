@@ -9,7 +9,7 @@ async function ResetPassword() {
 
   return (
     <SettingsContainer pathname={"/settings/resetpassword"}>
-      <ResetPasswordForm />
+      <ResetPasswordForm token={authSession.auth_token} />
     </SettingsContainer>
   );
 }

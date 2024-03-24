@@ -35,7 +35,7 @@ async function SettingsContainer({ children, pathname }: Props) {
   const authSession: any = await getServerAuthSession();
   return (
     <div
-      className={cn('px-5 md:pb-20', {
+      className={cn('md:px-5 md:pb-20', {
         'pb-32': pathname == '/settings',
       })}
     >
