@@ -38,28 +38,44 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
 import { useEffect, useState } from 'react';
 import service from '@/lib/axios';
+import { useMediaQuery } from '@/lib/useMediaQuery';
 
 export default function Component() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   return (
-    <div className="flex justify-center relative w-full h-fit mt-[75px] md:mt-0 md:h-[800px]">
-      <div
-        className="relative w-full flex items-center justify-start h-full"
-        style={{
-          backgroundImage:
-            'linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(/tourheader.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="w-full md:container md:mx-auto">
-          <Card className="max-w-[568px] w-full">
-            <CardContent className="p-6">
-              <ComboboxForm />
-            </CardContent>
-          </Card>
+    <>
+      {!isMobile ? (
+        <div className="flex justify-center relative w-full h-fit mt-[75px] md:mt-0 md:h-[800px]">
+          <div
+            className="relative w-full flex items-center justify-start h-full"
+            style={{
+              backgroundImage:
+                'linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(/tourheader.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div className="w-full md:container md:mx-auto">
+              <Card className="md:max-w-[568px] md:rounded-lg rounded-none md:border border-0 w-full">
+                <CardContent className="p-6">
+                  <ComboboxForm />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="flex justify-center relative w-full h-fit mt-[75px] md:mt-0 md:h-[800px]">
+            <div className="w-full md:container md:mx-auto">
+              <Card className="md:max-w-[568px] md:rounded-lg rounded-none md:border border-0 w-full">
+                <CardContent className="p-6">
+                  <ComboboxForm />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+      )}
+    </>
   );
 }
 
