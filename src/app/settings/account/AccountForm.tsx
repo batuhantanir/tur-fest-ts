@@ -1,10 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { Formik, Form, FormikHelpers } from 'formik';
+import React, { useState } from 'react';
+import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
 import axios from 'axios';
 import TurnBack from '../TurnBack';
+import { signOut } from 'next-auth/react';
 
 interface User {
   email: string;
@@ -33,47 +34,58 @@ const validationSchema = Yup.object({
     ),
 });
 
-function AccountForm({ token }: { token: string }) {
-  const [user, setUser] = useState<User | null>(null);
+interface authSession {
+  user: {
+    name: string;
+    surname: string;
+    email: string;
+  };
+  auth_token: string;
+}
 
-  useEffect(() => {
-    axios
-      .get('https://emur.dev/users/credentials', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setUser(response.data.data);
-        // console.log(user);
-        setUser(response.data.data);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  }, [token]);
+function AccountForm({ authSession }: { authSession: authSession }) {
+  const [message, setMessage] = useState<boolean>(false);
+  const token = authSession.auth_token;
+
+  const initialValues = {
+    name: authSession.user.name || '',
+    surname: authSession.user.surname || '',
+    email: authSession.user.email || '',
+  };
 
   const onSubmit = (
     values: User,
     { setSubmitting }: FormikHelpers<User>
   ): void => {
-    // console.log(values);
-    setSubmitting(false);
+    axios
+      .put('https://emur.dev/users/credentials', values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setSubmitting(false);
+        setMessage(true);
+        setTimeout(() => {
+          signOut();
+        }, 3500);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setSubmitting(false);
+      });
   };
 
   return (
     <div className="mx-auto container flex flex-col gap-5 py-5">
       <h1 className="border-b py-3 pl-1 border-[#E4E4E7]">Hesap Bilgileri</h1>
-      {user && (
-        <Formik
-          initialValues={{
-            name: user?.name || '',
-            surname: user?.surname || '',
-            email: user?.email || '',
-          }}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ dirty, isSubmitting }) => (
           <Form className="flex flex-col items-center md:items-start gap-5 w-full">
             <Input title="Adınız" name="name" className="w-full md:w-[63%]" />
             <Input
@@ -92,17 +104,23 @@ function AccountForm({ token }: { token: string }) {
                 değiştirebilirsiniz.
               </p>
             </div>
+            {message === true && (
+              <p className="text-green-500">
+                Bilgileriniz başarıyla güncellendi. Tekrar giriş yapınız..
+              </p>
+            )}
             <div className="w-[63%] flex items-center justify-center">
               <button
-                className="rounded-md h-[40px] bg-[#00439A] text-white px-7 hover:bg-[#006CB5] transition duration-150"
+                className={`rounded-md h-[40px] bg-[#00439A] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#00439A] text-white px-7 hover:bg-[#006CB5] transition duration-150`}
                 type="submit"
+                disabled={!dirty || isSubmitting || message}
               >
-                Kaydet
+                {isSubmitting ? 'Kaydediliyor...' : 'Kaydet'}
               </button>
             </div>
           </Form>
-        </Formik>
-      )}
+        )}
+      </Formik>
       <TurnBack />
     </div>
   );

@@ -8,7 +8,7 @@ const Account = async () => {
 
   return (
     <SettingsContainer pathname="/settings/account">
-      <AccountForm token={authSession.auth_token} />
+      <AccountForm authSession={authSession} />
     </SettingsContainer>
   );
 };
