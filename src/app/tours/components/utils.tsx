@@ -216,10 +216,8 @@ export const MinMaxPrice = ({
                 </label>
               </div>
             </div>
-            {minPrice >= maxPrice &&
-            minPrice &&
-            maxPrice &&
-            (!(maxPrice == 0) || !(minPrice == 0)) ? (
+            {Number(minPrice) >= Number(maxPrice) &&
+            (!(Number(maxPrice) == 0) || !(Number(minPrice) == 0)) ? (
               <div className="text-red-500 text-sm">
                 Min fiyat max fiyattan büyük ve ya eşit olamaz.
               </div>

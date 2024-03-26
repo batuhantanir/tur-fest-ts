@@ -200,15 +200,21 @@ function Tours() {
         handleSearch('sub_category', sub_categories, params);
       else handleSearch('sub_category', 0, params);
 
-      if (minPrice > 0 && (minPrice < maxPrice || maxPrice == 0)) {
-        handleSearch('min_price', minPrice, params);
-      } else if (minPrice == 0) {
+      if (
+        Number(minPrice) > 0 &&
+        (Number(minPrice) < Number(maxPrice) || Number(maxPrice) == 0)
+      ) {
+        handleSearch('min_price', Number(minPrice) * 100, params);
+      } else if (Number(minPrice) == 0) {
         handleSearch('min_price', 0, params);
       }
 
-      if (maxPrice > 0 && (minPrice < maxPrice || minPrice == 0)) {
-        handleSearch('max_price', maxPrice, params);
-      } else if (maxPrice == 0) {
+      if (
+        Number(maxPrice) > 0 &&
+        (Number(minPrice) < Number(maxPrice) || Number(minPrice) == 0)
+      ) {
+        handleSearch('max_price', Number(maxPrice) * 100, params);
+      } else if (Number(maxPrice) == 0) {
         handleSearch('max_price', 0, params);
       }
     }
