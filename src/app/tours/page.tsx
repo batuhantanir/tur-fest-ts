@@ -200,12 +200,16 @@ function Tours() {
         handleSearch('sub_category', sub_categories, params);
       else handleSearch('sub_category', 0, params);
 
-      if (minPrice > 0 && minPrice < maxPrice) {
+      if (minPrice > 0 && (minPrice < maxPrice || maxPrice == 0)) {
         handleSearch('min_price', minPrice, params);
+      } else if (minPrice == 0) {
+        handleSearch('min_price', 0, params);
       }
 
-      if (maxPrice > 0 && minPrice < maxPrice) {
+      if (maxPrice > 0 && (minPrice < maxPrice || minPrice == 0)) {
         handleSearch('max_price', maxPrice, params);
+      } else if (maxPrice == 0) {
+        handleSearch('max_price', 0, params);
       }
     }
   };
@@ -260,6 +264,15 @@ function Tours() {
       .finally(() => {
         setCategoryIsLoading(false);
       });
+    setMinPrice(Number(searchParams.get('min_price')));
+    setMaxPrice(Number(searchParams.get('max_price')));
+    setMonths((prev: any) => ({
+      ...prev,
+      sub_categories: prev.sub_categories.map((item: any) => ({
+        ...item,
+        checked: searchParams.get('month')?.includes(item.id),
+      })),
+    }));
   }, []);
 
   useEffect(() => {
@@ -459,7 +472,6 @@ function Tours() {
                 ))}
                 {categoryIsLoading ? (
                   <>
-                    di
                     <div>
                       {Array.from({ length: 2 }).map((_, i) => (
                         <div
@@ -474,17 +486,17 @@ function Tours() {
                   </>
                 ) : (
                   <>
+                    <MonthFilter
+                      isMobile={false}
+                      months={months}
+                      setMonths={setMonths}
+                    />
                     <MinMaxPrice
                       setMinPrice={setMinPrice}
                       setMaxPrice={setMaxPrice}
                       minPrice={minPrice}
                       maxPrice={maxPrice}
                       isMobile={false}
-                    />
-                    <MonthFilter
-                      isMobile={false}
-                      months={months}
-                      setMonths={setMonths}
                     />
                   </>
                 )}

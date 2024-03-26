@@ -152,96 +152,84 @@ export const MinMaxPrice = ({
   isMobile: boolean;
 }) => {
   return (
-    <Disclosure
-      as="div"
+    <div
       className={cn('py-6 border-b border-gray-200 ', {
         'border-t px-4': isMobile,
       })}
     >
-      {({ open }) => (
-        <>
-          <h3 className="flow-root -my-3">
-            <Disclosure.Button
-              className={cn(
-                'flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500',
-                { 'text-base': isMobile }
-              )}
-            >
-              <span className="font-medium text-gray-900">Fiyat aralığı</span>
-              <span className="flex items-center ml-6">
-                {open ? (
-                  <MinusIcon className="w-5 h-5" aria-hidden="true" />
-                ) : (
-                  <PlusIcon className="w-5 h-5" aria-hidden="true" />
-                )}
-              </span>
-            </Disclosure.Button>
-          </h3>
-          <Disclosure.Panel className="pt-6">
-            <>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <input
-                      id="minPrice"
-                      min={0}
-                      max={maxPrice}
-                      type="number"
-                      value={minPrice}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '' || /^\d+$/.test(value)) {
-                          setMinPrice(value);
-                        }
-                      }}
-                      className="w-20 h-8 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    />
-                    <label
-                      htmlFor={`minPrice`}
-                      className="ml-3 text-sm text-gray-600"
-                    >
-                      MİN
-                    </label>
-                  </div>
-                  <div>
-                    <input
-                      id="MaxPrice"
-                      min={minPrice}
-                      type="number"
-                      value={maxPrice}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '' || /^\d+$/.test(value)) {
-                          setMaxPrice(value);
-                        }
-                        console.log(maxPrice, minPrice);
-                      }}
-                      className="w-20 h-8 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    />
-                    <label
-                      htmlFor={`MaxPrice`}
-                      className="ml-3 text-sm text-gray-600"
-                    >
-                      MAX
-                    </label>
-                  </div>
-                </div>
-                {minPrice >= maxPrice && (minPrice && maxPrice) && (
-                  <div className="text-red-500 text-sm">
-                    Min fiyat max fiyattan büyük ve ya eşit olamaz.
-                  </div>
-                )}
-                {(!minPrice || !maxPrice) && (
-                  <div className="text-red-500 text-sm">
-                    Max ve min fiyat alanları boş bırakılamaz.
-                  </div>
-                )}
+      <>
+        <h3 className="flow-root -my-3">
+          <div
+            className={cn(
+              'flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500',
+              { 'text-base': isMobile }
+            )}
+          >
+            <span className="font-medium text-gray-900">Fiyat aralığı</span>
+          </div>
+        </h3>
+        <div className="pt-6">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <input
+                  id="minPrice"
+                  min={0}
+                  max={maxPrice}
+                  type="number"
+                  value={minPrice}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '' || /^\d+$/.test(value)) {
+                      setMinPrice(value);
+                    }
+                  }}
+                  className="w-20 h-8 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor={`minPrice`}
+                  className="ml-3 text-sm text-gray-600"
+                >
+                  MİN
+                </label>
               </div>
-            </>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+              <div>
+                <input
+                  id="MaxPrice"
+                  min={minPrice}
+                  type="number"
+                  value={maxPrice}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '' || /^\d+$/.test(value)) {
+                      setMaxPrice(value);
+                    }
+                    console.log(maxPrice, minPrice);
+                  }}
+                  className="w-20 h-8 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor={`MaxPrice`}
+                  className="ml-3 text-sm text-gray-600"
+                >
+                  MAX
+                </label>
+              </div>
+            </div>
+            {minPrice >= maxPrice &&
+            minPrice &&
+            maxPrice &&
+            (!(maxPrice == 0) || !(minPrice == 0)) ? (
+              <div className="text-red-500 text-sm">
+                Min fiyat max fiyattan büyük ve ya eşit olamaz.
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
+      </>
+    </div>
   );
 };
 
