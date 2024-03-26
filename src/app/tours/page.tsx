@@ -186,15 +186,12 @@ function Tours() {
   const setMonthParams = (month: any, sub_categories: any) => {
     const params = new URLSearchParams(searchParams);
 
-    console.log(month, sub_categories.length);
     if (month.length > 0) {
-      console.log('if');
       handleSearch('month', month.join(','), params);
       handleSearch('sub_category', 0, params);
       if (sub_categories.length > 0)
         handleSearch('sub_category', sub_categories, params);
     } else {
-      console.log('else');
       handleSearch('month', 0, params);
       if (sub_categories.length > 0)
         handleSearch('sub_category', sub_categories, params);

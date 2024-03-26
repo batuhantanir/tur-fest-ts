@@ -204,7 +204,6 @@ export const MinMaxPrice = ({
                     if (value === '' || /^\d+$/.test(value)) {
                       setMaxPrice(value);
                     }
-                    console.log(maxPrice, minPrice);
                   }}
                   className="w-20 h-8 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
@@ -310,7 +309,6 @@ export const ChildCategory = ({
                     : prev
                 )
               );
-              console.log(filters[0].sub_categories[0]);
             }}
             checked={option.checked}
             type="checkbox"
