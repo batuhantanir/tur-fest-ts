@@ -270,8 +270,8 @@ function Tours() {
       .finally(() => {
         setCategoryIsLoading(false);
       });
-    setMinPrice(Number(searchParams.get('min_price')));
-    setMaxPrice(Number(searchParams.get('max_price')));
+    setMinPrice(Number(searchParams.get('min_price')) / 100);
+    setMaxPrice(Number(searchParams.get('max_price')) / 100);
     setMonths((prev: any) => ({
       ...prev,
       sub_categories: prev.sub_categories.map((item: any) => ({
