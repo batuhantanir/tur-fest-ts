@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import { useRouter, useSearchParams } from 'next/navigation';
 import service from '@/lib/axios';
+import { FiCheckCircle } from 'react-icons/fi';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 function Verify() {
   const params = useSearchParams();
@@ -43,27 +45,30 @@ function Verify() {
 
   if (error)
     return (
-      <div className="flex-1 min-h-full flex items-center justify-center text-white">
-        <div className="bg-red-400 rounded-md px-8 py-6 space-y-4 max-w-[25em]">
-          <h1 className="text-xl font-semibold">Bir şeyler ters gitti</h1>
-          <div className="space-y-0.5">
-            <p className="font-medium">
-              E-postanız doğrulanırken bir hata oluştu. Doğrulama linkini süresi
-              dolmuş olabilir. Anasayfaya yönlendiriliyorsunuz...
+      <div className="flex-1 min-h-full flex items-center justify-center text-black">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="text-center space-y-2 flex flex-col items-center">
+            <IoCloseCircleOutline className="w-14 h-14 text-red-500" />
+            <h1 className="text-3xl font-bold">Bir şeyler ters gitti.</h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              E-postanız doğrulanırken bir hata oluştu. <br />
+              Doğrulama linkini süresi dolmuş olabilir.
+              <br /> Anasayfaya yönlendiriliyorsunuz...
             </p>
-            <p>Hata: {error}</p>
+            <p>{verified}</p>
           </div>
         </div>
       </div>
     );
 
   return (
-    <div className="flex-1 min-h-full flex items-center justify-center text-white">
+    <div className="flex-1 min-h-full flex items-center justify-center text-black">
       {verified ? (
-        <div className="bg-green-400 rounded-md px-8 py-6 space-y-4 max-w-[25em]">
-          <h1 className="text-xl font-semibold">Hesabınız Doğrulandı</h1>
-          <div className="space-y-0.5">
-            <p className="font-medium">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="text-center space-y-2 flex flex-col items-center">
+            <FiCheckCircle className="w-14 h-14 text-green-500" />
+            <h1 className="text-3xl font-bold">Email Doğrulandı.</h1>
+            <p className="text-gray-500 dark:text-gray-400">
               Hesabınızın doğrulanması gerçekleşti <br />
               Giriş sayfasına yönlendiriliyorsunuz...
             </p>
@@ -71,7 +76,7 @@ function Verify() {
           </div>
         </div>
       ) : (
-        <div>bir hata oluştu</div>
+        <div className="text-lg font-medium">bir hata oluştu.</div>
       )}
     </div>
   );

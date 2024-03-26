@@ -26,7 +26,7 @@ function Footer() {
   });
 
   return (
-    <footer className="border-t">
+    <footer className="border-t md:pb-0 pb-5">
       <div className="md:container md:mx-auto">
         <div className="flex flex-col justify-between gap-5 px-5 py-10 border-b md:gap-0 md:flex-row">
           <div className="flex flex-col">

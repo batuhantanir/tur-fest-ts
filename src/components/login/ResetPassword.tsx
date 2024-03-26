@@ -62,6 +62,9 @@ function ResetPassword({ resetToken }: { resetToken: string }) {
       .catch((err) => {
         setIsError(err.response.data);
         setIsSuccess(false);
+        setTimeout(() => {
+          push('/');
+        }, 2000);
       });
   };
 
@@ -79,7 +82,8 @@ function ResetPassword({ resetToken }: { resetToken: string }) {
           <Form className="flex flex-col gap-4 w-full">
             {isError && (
               <div className="bg-red-500 text-white p-2 rounded-md">
-                {isError?.message}
+                {isError?.message} <br />
+                Ana sayfaya yönlendiriliyorsunuz...
               </div>
             )}
             {isSuccess && (
