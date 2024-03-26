@@ -1,13 +1,6 @@
 'use client';
-import React, {
-  useState,
-  useEffect,
-  Fragment,
-  useCallback,
-  SetStateAction,
-} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   ChevronDownIcon,
   FunnelIcon,
@@ -18,12 +11,10 @@ import { FaArrowDown } from 'react-icons/fa6';
 import { FaArrowUp } from 'react-icons/fa6';
 import ProductCard from './components/ProductCard';
 import ProductCardSkeleton from './components/ProductCardSkeleton';
-
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { Skeleton } from '@/components/ui/skeleton';
 import service from '@/lib/axios';
-import { cn } from '@/lib/utils';
 import Paginations from './components/Paginations';
 import MobileFilter from './components/MobileFilter';
 import {
@@ -63,14 +54,6 @@ const sortOptions = [
     current: false,
     icon: FaArrowDown,
   },
-];
-
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
 ];
 
 function classNames(...classes: any) {
@@ -169,7 +152,7 @@ function Tours() {
     .join('&');
 
   const pathname = usePathname();
-  const { replace, refresh } = useRouter();
+  const { replace } = useRouter();
 
   const handleSearch = (query: any, term: any, params: any) => {
     if (term) {
@@ -320,7 +303,15 @@ function Tours() {
           months={months}
           setMonths={setMonths}
           setMonthParams={setMonthParams}
-        />
+        >
+          <MinMaxPrice
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            isMobile={true}
+          />
+        </MobileFilter>
 
         <main className="w-full container max-w-7xl">
           <div className="flex items-baseline justify-between py-6 pb-6 border-b border-gray-200">

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, ReactElement } from 'react';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { MinusIcon, PlusIcon } from 'lucide-react';
@@ -6,6 +6,7 @@ import {
   CategoryButton,
   ChildCategory,
   HandleFilter,
+  MinMaxPrice,
   MonthFilter,
 } from './utils';
 
@@ -21,6 +22,7 @@ function MobileFilter({
   months,
   setMonths,
   setMonthParams,
+  children,
 }: {
   mobileFiltersOpen: boolean;
   setMobileFiltersOpen: any;
@@ -33,6 +35,7 @@ function MobileFilter({
   months: any;
   setMonths: any;
   setMonthParams: any;
+  children: ReactElement;
 }) {
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -134,6 +137,7 @@ function MobileFilter({
                   months={months}
                   setMonths={setMonths}
                 />
+                {children}
                 <HandleFilter
                   filters={filters}
                   handleSearch={handleSearch}
