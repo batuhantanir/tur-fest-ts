@@ -66,27 +66,18 @@ export default function Component() {
         </div>
       ) : (
         <div className="flex justify-center relative w-full h-fit mt-[75px] md:mt-0 md:h-[800px]">
-            <div className="w-full md:container md:mx-auto">
-              <Card className="md:max-w-[568px] md:rounded-lg rounded-none md:border border-0 w-full">
-                <CardContent className="p-6">
-                  <ComboboxForm />
-                </CardContent>
-              </Card>
-            </div>
+          <div className="w-full md:container md:mx-auto">
+            <Card className="md:max-w-[568px] md:rounded-lg rounded-none md:border border-0 w-full">
+              <CardContent className="p-6">
+                <ComboboxForm />
+              </CardContent>
+            </Card>
           </div>
+        </div>
       )}
     </>
   );
 }
-
-// const cities = [
-//   { label: 'Adana', value: 'adana' },
-//   { label: 'Ankara', value: 'ankara' },
-//   { label: 'Istanbul', value: 'istanbul' },
-//   { label: 'Izmir', value: 'izmir' },
-//   { label: 'Antalya', value: 'antalya' },
-//   // Add more cities here
-// ] as const;
 
 const FormSchema = z.object({
   city: z.string({
@@ -107,6 +98,7 @@ export function ComboboxForm() {
     { label: 'Izmir', value: 'izmir' },
     { label: 'Antalya', value: 'antalya' },
   ]);
+  const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
 
   useEffect(() => {
     service
@@ -123,7 +115,7 @@ export function ComboboxForm() {
         // console.log(error);
       });
   }, []);
-  // console.log(cities);
+
   const { push } = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -131,6 +123,8 @@ export function ComboboxForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    data.month = selectedMonths
+    .join(',')
     push(`/tours?city=${data.city}&month=${data.month}`);
   }
 
@@ -148,6 +142,14 @@ export function ComboboxForm() {
     'Kasım',
     'Aralık',
   ] as const;
+
+  const toggleMonth = (month: string) => {
+    if (selectedMonths.includes(month)) {
+      setSelectedMonths(selectedMonths.filter((m) => m !== month));
+    } else {
+      setSelectedMonths([...selectedMonths, month]);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -238,8 +240,10 @@ export function ComboboxForm() {
                         !field.value && 'text-muted-foreground'
                       )}
                     >
-                      {field.value
-                        ? months[Number(field.value)]
+                      {selectedMonths.length > 0
+                        ? selectedMonths
+                            .map((monthIndex) => months[parseInt(monthIndex)])
+                            .join(', ')
                         : 'Ay seçiniz...'}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -253,10 +257,13 @@ export function ComboboxForm() {
                       <FormItem className="">
                         <FormControl>
                           <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) => {
+                              form.setValue('month', value);
+                            }}
+                            defaultValue={selectedMonths[0]}
                             className="grid grid-cols-4 grid-rows-3 gap-4"
                           >
+                     
                             {months.map((month, i) => (
                               <FormItem key={month + i}>
                                 <FormControl>
@@ -270,6 +277,7 @@ export function ComboboxForm() {
                                 <Label
                                   htmlFor={`month-${i}`}
                                   className="flex flex-col aspect-square items-center justify-center rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                  onClick={() => toggleMonth(String(i))}
                                 >
                                   {month}
                                 </Label>
