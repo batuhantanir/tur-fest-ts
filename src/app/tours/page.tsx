@@ -6,7 +6,7 @@ import React, {
   useCallback,
   SetStateAction,
 } from 'react';
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   ChevronDownIcon,
@@ -18,20 +18,21 @@ import { FaArrowDown } from 'react-icons/fa6';
 import { FaArrowUp } from 'react-icons/fa6';
 import ProductCard from './components/ProductCard';
 import ProductCardSkeleton from './components/ProductCardSkeleton';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { Skeleton } from '@/components/ui/skeleton';
 import service from '@/lib/axios';
 import { cn } from '@/lib/utils';
+import Paginations from './components/Paginations';
+import MobileFilter from './components/MobileFilter';
+import {
+  CategoryButton,
+  ChildCategory,
+  HandleFilter,
+  MinMaxPrice,
+  MonthFilter,
+} from './components/utils';
 
 type SubCategory = {
   _id: string;
@@ -81,11 +82,78 @@ function Tours() {
   const [sortOptionsName, setSortOptionsName] = useState('En Popüler');
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [months, setMonths] = useState({
+    name: 'Aylar',
+    sub_categories: [
+      {
+        id: 1,
+        name: 'Ocak',
+        checked: false,
+      },
+      {
+        id: 2,
+        name: 'Şubat',
+        checked: false,
+      },
+      {
+        id: 3,
+        name: 'Mart',
+        checked: false,
+      },
+      {
+        id: 4,
+        name: 'Nisan',
+        checked: false,
+      },
+      {
+        id: 5,
+        name: 'Mayıs',
+        checked: false,
+      },
+      {
+        id: 6,
+        name: 'Haziran',
+        checked: false,
+      },
+      {
+        id: 7,
+        name: 'Temmuz',
+        checked: false,
+      },
+      {
+        id: 8,
+        name: 'Ağustos',
+        checked: false,
+      },
+      {
+        id: 9,
+        name: 'Eylül',
+        checked: false,
+      },
+      {
+        id: 10,
+        name: 'Ekim',
+        checked: false,
+      },
+      {
+        id: 11,
+        name: 'Kasım',
+        checked: false,
+      },
+      {
+        id: 12,
+        name: 'ARALIK',
+        checked: false,
+      },
+    ],
+  });
   const [categoryIsLoading, setCategoryIsLoading] = useState(true);
   const [totalProductsCount, setTotalProductsCount] = useState<Number | null>(
     null
   );
   const [filters, setFilters] = useState<any>([]);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(0);
   const searchParams = useSearchParams();
   const limit = Number(searchParams.get('limit'))
     ? Number(searchParams.get('limit'))
@@ -103,8 +171,7 @@ function Tours() {
   const pathname = usePathname();
   const { replace, refresh } = useRouter();
 
-  const handleSearch = (query: any, term: any) => {
-    const params = new URLSearchParams(searchParams);
+  const handleSearch = (query: any, term: any, params: any) => {
     if (term) {
       params.set(query, term);
     } else {
@@ -112,7 +179,35 @@ function Tours() {
     }
     params.delete('offset');
     params.delete('limit');
+
     replace(`${pathname}?${params}`);
+  };
+
+  const setMonthParams = (month: any, sub_categories: any) => {
+    const params = new URLSearchParams(searchParams);
+
+    console.log(month, sub_categories.length);
+    if (month.length > 0) {
+      console.log('if');
+      handleSearch('month', month.join(','), params);
+      handleSearch('sub_category', 0, params);
+      if (sub_categories.length > 0)
+        handleSearch('sub_category', sub_categories, params);
+    } else {
+      console.log('else');
+      handleSearch('month', 0, params);
+      if (sub_categories.length > 0)
+        handleSearch('sub_category', sub_categories, params);
+      else handleSearch('sub_category', 0, params);
+
+      if (minPrice > 0 && minPrice < maxPrice) {
+        handleSearch('min_price', minPrice, params);
+      }
+
+      if (maxPrice > 0 && minPrice < maxPrice) {
+        handleSearch('max_price', maxPrice, params);
+      }
+    }
   };
 
   const fetchProducts = () => {
@@ -137,7 +232,7 @@ function Tours() {
 
   useEffect(() => {
     fetchProducts();
-  }, [sortOptionsName]);
+  }, [sortOptionsName, searchQuery]);
 
   useEffect(() => {
     service
@@ -157,7 +252,7 @@ function Tours() {
           };
         });
 
-        setFilters(categories);
+        setFilters([...categories]);
       })
       .catch(function (error) {
         alert(error.message);
@@ -181,10 +276,11 @@ function Tours() {
   }, [products]);
 
   const sortOptionChange = ({ option }: { option: any }) => {
-    sortOptions.map((item) => {
+    sortOptions.map((item: any) => {
       if (item.name === option.name) {
+        const params = new URLSearchParams(searchParams);
         item.current = true;
-        handleSearch('order_by', item.key);
+        handleSearch('order_by', item.key, params);
         setSortOptionsName(item.name);
       } else {
         item.current = false;
@@ -192,223 +288,23 @@ function Tours() {
     });
   };
 
-  const HandleFilter = () => {
-    return (
-      <div className="flex justify-center">
-        <button
-          className="bg-cst-secondary/95 text-white font-medium py-2 w-[90%] rounded-lg my-5 hover:bg-cst-secondary/85 transition-colors duration-300 ease-in-out"
-          type="button"
-          onClick={() => {
-            let sub_categories = '';
-            filters.map((item: any) => {
-              item.sub_categories &&
-                item.sub_categories.map((sub_item: any) => {
-                  if (sub_item.checked) {
-                    sub_categories += `${sub_item.id},`;
-                  }
-                });
-            });
-            console.log(sub_categories);
-            if (sub_categories.length > 0) {
-              handleSearch('sub_category', sub_categories);
-            } else {
-              handleSearch('sub_category', 0);
-            }
-            fetchProducts();
-          }}
-        >
-          Filtrele
-        </button>
-      </div>
-    );
-  };
-
-  const CategoryButton = ({ category }: { category: any }) => {
-    return (
-      <li className="flex justify-between items-center">
-        <button
-          type="button"
-          onClick={() => {
-            handleSearch('category', category.id);
-          }}
-          className="block px-2 py-3 font-medium text-gray-900"
-        >
-          {category.name}
-        </button>
-        <button
-          className={cn(
-            `text-red-500 hidden mr-5 text-xl border border-red-500 hover:text-white hover:bg-red-500 active:scale-95 transition-all duration-150 w-8 h-8 rounded-full `,
-            {
-              block: category.id == searchParams.get('category'),
-            }
-          )}
-          type="button"
-          onClick={() => {
-            handleSearch('category', 0);
-          }}
-        >
-          x
-        </button>
-      </li>
-    );
-  };
-
   return (
     <div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
-        <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setMobileFiltersOpen}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 z-40 flex">
-              <Transition.Child
-                as={Fragment}
-                enter="transition ease-in-out duration-300 transform"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
-              >
-                <Dialog.Panel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-12 ml-auto overflow-y-auto bg-white shadow-xl">
-                  <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Filters
-                    </h2>
-                    <button
-                      type="button"
-                      className="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 bg-white rounded-md"
-                      onClick={() => setMobileFiltersOpen(false)}
-                    >
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  {/* Filters */}
-                  <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
-                      {filters.map((category: any,index:number) => (
-                        <CategoryButton key={index} category={category} />
-                      ))}
-                    </ul>
-
-                    {filters.map((section: any) => (
-                      <Disclosure
-                        as="div"
-                        key={section.id}
-                        className="px-4 py-6 border-t border-gray-200"
-                      >
-                        {({ open }) => (
-                          <>
-                            <h3 className="flow-root -mx-2 -my-3">
-                              <Disclosure.Button className="flex items-center justify-between w-full px-2 py-3 text-gray-400 bg-white hover:text-gray-500">
-                                <span className="font-medium text-gray-900">
-                                  {section.name}
-                                </span>
-                                <span className="flex items-center ml-6">
-                                  {open ? (
-                                    <MinusIcon
-                                      className="w-5 h-5"
-                                      aria-hidden="true"
-                                    />
-                                  ) : (
-                                    <PlusIcon
-                                      className="w-5 h-5"
-                                      aria-hidden="true"
-                                    />
-                                  )}
-                                </span>
-                              </Disclosure.Button>
-                            </h3>
-                            <Disclosure.Panel className="pt-6">
-                              <div className="space-y-6">
-                                {section.sub_categories.map(
-                                  (option: any, optionIdx: any) => (
-                                    <div
-                                      key={option.value}
-                                      className="flex items-center"
-                                    >
-                                      <input
-                                        id={`filter-${section.id}-${optionIdx}`}
-                                        name={`${option.id}`}
-                                        defaultValue={option.value}
-                                        onChange={(e) => {
-                                          const updatedOptions =
-                                            section.sub_categories.map(
-                                              (opt: any, idx: any) => {
-                                                if (idx === optionIdx) {
-                                                  return {
-                                                    ...opt,
-                                                    checked: e.target.checked,
-                                                  };
-                                                }
-                                                return opt;
-                                              }
-                                            );
-                                          setFilters((prev: any) =>
-                                            prev.map((prev: any) =>
-                                              prev.id === section.id
-                                                ? {
-                                                    ...prev,
-                                                    sub_categories:
-                                                      updatedOptions,
-                                                  }
-                                                : prev
-                                            )
-                                          );
-                                          console.log(
-                                            filters[0].sub_categories[0]
-                                          );
-                                        }}
-                                        checked={option.checked}
-                                        type="checkbox"
-                                        defaultChecked={option.checked}
-                                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                      />
-                                      <label
-                                        htmlFor={`filter-${section.id}-${optionIdx}`}
-                                        className="ml-3 text-sm text-gray-600"
-                                      >
-                                        {option.name}
-                                        {option.total_tours &&
-                                          `(${option.total_tours})`}
-                                      </label>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </Disclosure.Panel>
-                          </>
-                        )}
-                      </Disclosure>
-                    ))}
-                    <HandleFilter />
-                  </form>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition.Root>
+        <MobileFilter
+          mobileFiltersOpen={mobileFiltersOpen}
+          setMobileFiltersOpen={setMobileFiltersOpen}
+          filters={filters}
+          setFilters={setFilters}
+          handleSearch={handleSearch}
+          fetchProducts={fetchProducts}
+          categoryIsLoading={categoryIsLoading}
+          searchParams={searchParams}
+          months={months}
+          setMonths={setMonths}
+          setMonthParams={setMonthParams}
+        />
 
         <main className="w-full container max-w-7xl">
           <div className="flex items-baseline justify-between py-6 pb-6 border-b border-gray-200">
@@ -501,7 +397,12 @@ function Tours() {
                   )}
 
                   {filters.map((category: any, index: number) => (
-                    <CategoryButton key={index} category={category} />
+                    <CategoryButton
+                      searchParams={searchParams}
+                      handleSearch={handleSearch}
+                      key={index}
+                      category={category}
+                    />
                   ))}
                 </ul>
                 {categoryIsLoading && (
@@ -527,7 +428,7 @@ function Tours() {
                       <>
                         <h3 className="flow-root -my-3">
                           <Disclosure.Button className="flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500">
-                            <span className="font-medium text-gray-900">
+                            <span className="font-medium text-gray-900 first-letter:uppercase">
                               {section.name}
                             </span>
                             <span className="flex items-center ml-6">
@@ -546,65 +447,56 @@ function Tours() {
                           </Disclosure.Button>
                         </h3>
                         <Disclosure.Panel className="pt-6">
-                          <div className="space-y-4">
-                            {section?.sub_categories.map(
-                              (option: any, optionIdx: any) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center mx-2"
-                                >
-                                  <input
-                                    id={`filter-${section.id}-${optionIdx}`}
-                                    name={`${option.id}`}
-                                    defaultValue={option.value}
-                                    onChange={(e) => {
-                                      const updatedOptions =
-                                        section.sub_categories.map(
-                                          (opt: any, idx: any) => {
-                                            if (idx === optionIdx) {
-                                              return {
-                                                ...opt,
-                                                checked: e.target.checked,
-                                              };
-                                            }
-                                            return opt;
-                                          }
-                                        );
-                                      setFilters((prev: any) =>
-                                        prev.map((prev: any) =>
-                                          prev.id === section.id
-                                            ? {
-                                                ...prev,
-                                                sub_categories: updatedOptions,
-                                              }
-                                            : prev
-                                        )
-                                      );
-                                      console.log(filters[0].sub_categories[0]);
-                                    }}
-                                    checked={option.checked}
-                                    type="checkbox"
-                                    defaultChecked={option.checked}
-                                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`filter-${section.id}-${optionIdx}`}
-                                    className="ml-3 text-sm text-gray-600"
-                                  >
-                                    {option.name}
-                                    {option.total_tours &&
-                                      `(${option.total_tours})`}
-                                  </label>
-                                </div>
-                              )
-                            )}
-                          </div>
+                          <ChildCategory
+                            filters={filters}
+                            setFilters={setFilters}
+                            section={section}
+                          />
                         </Disclosure.Panel>
                       </>
                     )}
                   </Disclosure>
                 ))}
-                <HandleFilter />
+                {categoryIsLoading ? (
+                  <>
+                    di
+                    <div>
+                      {Array.from({ length: 2 }).map((_, i) => (
+                        <div
+                          className="flex justify-between border-b py-6"
+                          key={i}
+                        >
+                          <Skeleton className="w-[120px] h-[20px] bg-gray-200" />
+                          <Skeleton className="w-[20px] h-[20px] bg-gray-200" />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <MinMaxPrice
+                      setMinPrice={setMinPrice}
+                      setMaxPrice={setMaxPrice}
+                      minPrice={minPrice}
+                      maxPrice={maxPrice}
+                      isMobile={false}
+                    />
+                    <MonthFilter
+                      isMobile={false}
+                      months={months}
+                      setMonths={setMonths}
+                    />
+                  </>
+                )}
+
+                <HandleFilter
+                  filters={filters}
+                  handleSearch={handleSearch}
+                  fetchProducts={fetchProducts}
+                  categoryIsLoading={categoryIsLoading}
+                  months={months}
+                  setMonthParams={setMonthParams}
+                />
               </form>
 
               {/* Product grid */}
@@ -616,116 +508,15 @@ function Tours() {
                 <ProductCard products={products} />
               )}
             </div>
-            {products.length != 0 &&
-              (isLoading ? (
-                <Pagination className={'py-10'}>
-                  <PaginationContent className={`space - x - 4`}>
-                    <PaginationItem>
-                      <Skeleton className="w-[70px] h-[30px] bg-gray-200" />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <Skeleton className="w-[50px] h-[30px] bg-gray-200" />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <Skeleton className="w-[70px] h-[30px] bg-gray-200" />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              ) : (
-                <Pagination className={'py-10'}>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href={`${
-                          offset > 0
-                            ? `/tours?limit=${limit}&offset=${
-                                offset - limit
-                              }&${searchQuery
-                                .split('&')
-                                .filter(
-                                  (item) =>
-                                    !item.includes('limit') &&
-                                    !item.includes('offset')
-                                )
-                                .join('&')}`
-                            : '#'
-                        }`}
-                        className={`${
-                          offset <= 0 &&
-                          'pointer-events-none text-black/50 hover:text-black/50'
-                        }`}
-                      />
-                    </PaginationItem>
-                    <PaginationItem>
-                      {offset - limit >= 0 && !isMobile && (
-                        <PaginationLink
-                          href={`/tours?limit${limit}&offset=${
-                            offset - limit
-                          }&${searchQuery
-                            .split('&')
-                            .filter(
-                              (item) =>
-                                !item.includes('limit') &&
-                                !item.includes('offset')
-                            )
-                            .join('&')}`}
-                        >
-                          {offset / limit}
-                        </PaginationLink>
-                      )}
-                      <PaginationLink href="#">
-                        {offset / limit + 1}
-                      </PaginationLink>
-                      {offset + limit < Number(totalProductsCount) &&
-                        !isMobile && (
-                          <PaginationLink
-                            href={`/tours?limit${limit}&&offset=${
-                              offset + limit
-                            }&${searchQuery
-                              .split('&')
-                              .filter(
-                                (item) =>
-                                  !item.includes('limit') &&
-                                  !item.includes('offset')
-                              )
-                              .join('&')}`}
-                          >
-                            {offset / limit + 2}
-                          </PaginationLink>
-                        )}
-                    </PaginationItem>
-                    {!isMobile && (
-                      <PaginationItem>
-                        {offset + 2 * limit < Number(totalProductsCount) && (
-                          <PaginationEllipsis />
-                        )}
-                      </PaginationItem>
-                    )}
-                    <PaginationItem>
-                      <PaginationNext
-                        href={
-                          offset + limit < Number(totalProductsCount)
-                            ? `/tours?limit=${limit}&offset=${
-                                offset + limit
-                              }&${searchQuery
-                                .split('&')
-                                .filter(
-                                  (item) =>
-                                    !item.includes('limit') &&
-                                    !item.includes('offset')
-                                )
-                                .join('&')}`
-                            : '#'
-                        }
-                        className={`${
-                          !(offset + limit < Number(totalProductsCount)) &&
-                          'pointer-events-none text-black/50 hover:text-black/50'
-                        }`}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              ))}
+            <Paginations
+              isLoading={isLoading}
+              products={products}
+              offset={offset}
+              limit={limit}
+              searchQuery={searchQuery}
+              totalProductsCount={totalProductsCount}
+              isMobile={isMobile}
+            />
           </section>
         </main>
       </div>
