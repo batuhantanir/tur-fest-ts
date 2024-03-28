@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Input from '@/components/general/CustomInput';
@@ -45,6 +45,8 @@ interface authSession {
 
 function AccountForm({ authSession }: { authSession: authSession }) {
   const [message, setMessage] = useState<boolean>(false);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false); // Flag to track form submission
+  const [emailToken , setEmailToken] = useState<string>(''); // Email change token
   const token = authSession.auth_token;
 
   const initialValues = {
@@ -58,11 +60,18 @@ function AccountForm({ authSession }: { authSession: authSession }) {
     { setSubmitting }: FormikHelpers<User>
   ): void => {
     axios
-      .put('https://emur.dev/users/credentials', values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      .put(
+        'https://emur.dev/users/credentials',
+        {
+          name: values.name,
+          surname: values.surname,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setSubmitting(false);
@@ -74,11 +83,61 @@ function AccountForm({ authSession }: { authSession: authSession }) {
       .catch((error) => {
         console.log(error.message);
         setSubmitting(false);
+      })
+      .finally(() => {
+        setFormSubmitted(true);
       });
   };
 
+  const getEmailToken = (values: User) => {
+    axios
+      .post(
+        'https://emur.dev/users/get-change-email-token',
+        { email: values.email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setEmailToken(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const emailSubmit = (values: User) => {
+    axios
+      .put(
+        'https://emur.dev/users/change-email',
+        {
+          token: emailToken,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+       console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  useEffect(() => {
+    if (formSubmitted && initialValues.email !== authSession.user.email) {
+      emailSubmit(initialValues);
+      getEmailToken(initialValues);
+    }
+  }, [formSubmitted, initialValues.email, authSession.user.email]);
+
   return (
-    <div className="mx-auto container flex flex-col gap-5 py-5">
+    <div className="md:container flex flex-col gap-5 py-5">
       <h1 className="border-b py-3 pl-1 border-[#E4E4E7]">Hesap Bilgileri</h1>
       <Formik
         initialValues={initialValues}

@@ -98,7 +98,7 @@ function ResetPasswordForm({ token }: { token: string }) {
   };
 
   return (
-    <div className="mx-auto container flex flex-col gap-5 py-5">
+    <div className="md:container flex flex-col gap-5 py-5">
       <h1 className="border-b py-3 pl-1 border-[#E4E4E7]">Şifre Değiştirme</h1>
       <Formik
         initialValues={initialValues}

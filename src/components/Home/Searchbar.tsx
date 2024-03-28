@@ -123,8 +123,7 @@ export function ComboboxForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.month = selectedMonths
-    .join(',')
+    data.month = selectedMonths.join(',');
     push(`/tours?city=${data.city}&month=${data.month}`);
   }
 
@@ -249,7 +248,7 @@ export function ComboboxForm() {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-5">
+                <PopoverContent className="max-w-[380px] md:w-[400px] md:p-5">
                   <FormField
                     control={form.control}
                     name="month"
@@ -261,9 +260,8 @@ export function ComboboxForm() {
                               form.setValue('month', value);
                             }}
                             defaultValue={selectedMonths[0]}
-                            className="grid grid-cols-4 grid-rows-3 gap-4"
+                            className="grid grid-cols-4 grid-rows-3 md:gap-4"
                           >
-                     
                             {months.map((month, i) => (
                               <FormItem key={month + i}>
                                 <FormControl>

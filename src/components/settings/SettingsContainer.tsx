@@ -35,11 +35,11 @@ async function SettingsContainer({ children, pathname }: Props) {
   const authSession: any = await getServerAuthSession();
   return (
     <div
-      className={cn('px-3 md:px-5 md:pb-20', {
+      className={cn('md:px-5 md:pb-20', {
         'pb-32': pathname == '/settings',
       })}
     >
-      <div className="flex flex-col md:flex-row md:flex py-10 md:gap-5 md:container md:mx-auto">
+      <div className="flex container flex-col md:flex-row md:flex py-10 md:gap-5 md:container md:mx-auto">
         <div
           className={cn(
             'hidden md:block md:w-1/3 h-[300px] border rounded-xl border-[#CFD4DA]',
