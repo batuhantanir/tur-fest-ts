@@ -9,10 +9,10 @@ import SearchBar from '@/components/Home/Searchbar';
 function App() {
   return (
     <div className="">
-      <SearchBar />
-      <HighlightsTours />
-      <FeatureCard />
       <CampaignTours />
+      <SearchBar />
+      <FeatureCard />
+      <HighlightsTours />
       <CustomerReviews />
       <Faq />
     </div>

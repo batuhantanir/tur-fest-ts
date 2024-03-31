@@ -7,19 +7,19 @@ interface PriceSchemaProps {
   reverse?: boolean;
 }
 
+export const convertTL = (price: number) => {
+  return new Intl.NumberFormat('tr-TR', {
+    style: 'currency',
+    currency: 'TRY',
+  }).format(price / 100);
+};
+
 function PriceSchema({
   price,
   flex,
   discountStyle,
   reverse,
 }: PriceSchemaProps) {
-  const convertTL = (price: number) => {
-    return new Intl.NumberFormat('tr-TR', {
-      style: 'currency',
-      currency: 'TRY',
-    }).format(price / 100);
-  };
-
   return (
     <>
       {price.campaign_exists ? (

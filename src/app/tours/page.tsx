@@ -313,7 +313,7 @@ function Tours() {
           />
         </MobileFilter>
 
-        <main className="w-full container max-w-7xl">
+        <main className="w-full px-2 sm:container max-w-7xl">
           <div className="flex items-baseline justify-between py-6 pb-6 border-b border-gray-200">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Turlar

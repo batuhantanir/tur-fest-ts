@@ -22,12 +22,11 @@ function ProductCard({ products }: ProductCardProps) {
           key={index}
           className="flex flex-col items-center justify-center w-full transition-shadow border rounded-lg shadow-md hover:shadow-lg md:items-stretch md:flex-row h-fit bg-gray-50 group hover:bg-gray-100"
         >
-          <div className="relative w-full h-56 md:w-fit min-w-60 md:h-72">
+          <div className="relative w-full h-56 md:max-w-72 min-w-60  md:h-72 overflow-hidden">
             {product.images[0] ? (
-              <Image
-                className="object-cover rounded-t-lg md:rounded-l-lg"
+              <img
+                className="object-cover rounded-t-lg md:rounded-l-lg w-full h-full "
                 src={`https://emur.dev/images/${product.images[0]}`}
-                fill
                 loading="lazy"
                 alt={product.name ? product.name : 'tur resmi'}
               />
