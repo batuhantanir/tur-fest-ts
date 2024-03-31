@@ -68,7 +68,7 @@ export default function Swip({ tourImage = [] }: SwipProps) {
         className={`w-full relative rounded-sm h-24 sm:h-36 md:h-[450px] md:w-36`}
       >
         {(tourImage as string[])?.map((image, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="cursor-pointer">
             <div className="">
               <Image
                 className="object-cover rounded-sm"
