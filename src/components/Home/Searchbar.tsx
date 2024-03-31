@@ -39,11 +39,11 @@ import service from '@/lib/axios';
 
 export default function Component() {
   return (
-    <div className="flex justify-center items-center relative w-full h-fit px-5 md:px-0 py-10 bg-black/5">
-      <div className="relative w-full flex items-center justify-start h-full">
+    <div className="flex justify-center items-center relative w-full h-fit px-0 md:px-0 py-0 ">
+      <div className="relative md:absolute w-full flex items-center justify-start h-full md:-top-10">
         <div className="w-full md:container md:mx-auto flex justify-center items-center">
           <Card className=" rounded-lg md:border border-0 w-full max-w-[1000px]">
-            <CardContent className="p-6">
+            <CardContent className="p-6 md:pt-2 md:pb-6">
               <ComboboxForm />
             </CardContent>
           </Card>
@@ -136,8 +136,11 @@ export function ComboboxForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col w-full whitespace-nowrap">
               <FormLabel className="text-lg flex items-center gap-1">
-                <LuLocate className="text-cst-primary mr-2" size={24} /> Nereye
-                gitmek istersiniz?
+                <LuLocate
+                  className="text-cst-primary mr-0.5 md:mr-2"
+                  size={24}
+                />{' '}
+                Nereye gitmek istersiniz?
               </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -204,7 +207,10 @@ export function ComboboxForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col w-full whitespace-nowrap">
               <FormLabel className="text-lg flex gap-1 items-center">
-                <LuCalendar className="text-cst-primary mr-2" size={24} />
+                <LuCalendar
+                  className="text-cst-primary mr-0.5 md:mr-2"
+                  size={24}
+                />
                 Ne Zaman Gitmek İstersiniz?
               </FormLabel>
               <Popover>
