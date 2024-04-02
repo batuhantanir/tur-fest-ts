@@ -59,6 +59,26 @@ function AccountForm({ authSession }: { authSession: authSession }) {
     values: User,
     { setSubmitting }: FormikHelpers<User>
   ): void => {
+    if (values.email !== authSession.user.email) {
+      axios
+      .post(
+        'https://emur.dev/users/get-change-email-token',
+        { new_email: values.email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log("asfasf",response);
+        setEmailToken(response.data);
+        emailSubmit(values);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+    }
     axios
       .put(
         'https://emur.dev/users/credentials',
@@ -73,12 +93,11 @@ function AccountForm({ authSession }: { authSession: authSession }) {
         }
       )
       .then((response) => {
-        console.log(response.data);
         setSubmitting(false);
         setMessage(true);
-        setTimeout(() => {
-          signOut();
-        }, 3500);
+        // setTimeout(() => {
+        //   signOut();
+        // }, 3500);
       })
       .catch((error) => {
         console.log(error.message);
@@ -89,24 +108,26 @@ function AccountForm({ authSession }: { authSession: authSession }) {
       });
   };
 
-  const getEmailToken = (values: User) => {
-    axios
-      .post(
-        'https://emur.dev/users/get-change-email-token',
-        { email: values.email },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setEmailToken(response.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+  // const getEmailToken = (values: User) => {
+  //   axios
+  //     .post(
+  //       'https://emur.dev/users/get-change-email-token',
+  //       { new_email: values.email },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log("asfasf",response.data);
+  //       setEmailToken(response.data);
+  //       emailSubmit(values);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.message);
+  //     });
+  // };
 
   const emailSubmit = (values: User) => {
     axios
@@ -122,19 +143,18 @@ function AccountForm({ authSession }: { authSession: authSession }) {
         }
       )
       .then((response) => {
-       console.log(response.data);
+       console.log("submitmail",response.data);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
-
-  useEffect(() => {
-    if (formSubmitted && initialValues.email !== authSession.user.email) {
-      emailSubmit(initialValues);
-      getEmailToken(initialValues);
-    }
-  }, [formSubmitted, initialValues.email, authSession.user.email]);
+  // useEffect(() => {
+  //   if (formSubmitted && initialValues.email !== authSession.user.email) {
+  //     emailSubmit(initialValues);
+  //     getEmailToken(initialValues);
+  //   }
+  // }, [formSubmitted]);
 
   return (
     <div className="md:container flex flex-col gap-5 py-5">
