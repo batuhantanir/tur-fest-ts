@@ -1,4 +1,4 @@
 export const loginDetails = {
-  email: 'emirys774@gmail.com',
-  password: 'Aa1.....',
+  email: 'batuhan_tanr@hotmail.com',
+  password: '123456Aa.',
 };
