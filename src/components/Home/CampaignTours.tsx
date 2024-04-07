@@ -25,33 +25,31 @@ function CampaignTours() {
   }, []);
 
   return (
-    <div
-      className="py-24 md:pt-40 md:pb-36 bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage:
-          'linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(/tourheader.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
+    <div className="pb-8 pt-24 space-y-8 md:container md:mx-auto">
+      <h1 className="text-center text-black text-2xl font-semibold">
+        KAMPANYALI TURLAR
+      </h1>
       <div className="py-8 space-y-8 md:container md:mx-auto ">
         <div className="flex flex-wrap items-center justify-center gap-8">
           {(data.length == 0 ? Array(4).fill({}) : data).map((item, index) => {
             return (
               <>
                 {item?.name ? (
-                  <>
-                    <ToursHorizontalCard key={index} item={item} />
-                    <ToursHorizontalCard key={index} item={item} />
-                    <ToursHorizontalCard key={index} item={item} />
-                    <ToursHorizontalCard key={index} item={item} />
-                  </>
+                  <ToursHorizontalCard key={index} item={item} />
                 ) : (
                   <ToursHorizontalCardSkeleton key={index} />
                 )}
               </>
             );
           })}
+        </div>
+        <div className="flex justify-center">
+          <a
+            href="/tours?campaign=true"
+            className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Tümünü Gör
+          </a>
         </div>
       </div>
     </div>

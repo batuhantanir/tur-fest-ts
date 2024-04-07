@@ -9,7 +9,7 @@ const ProductCardSkeleton = () => {
           key={index}
           className="flex flex-col items-center justify-center w-full rounded-lg shadow-md md:items-stretch md:flex-row h-fit bg-gray-50 group"
         >
-          <Skeleton className="relative w-full h-56 bg-gray-200 md:w-fit min-w-60 md:h-72" />
+          <Skeleton className="relative w-full h-56 bg-gray-200 md:w-fit min-w-72 md:h-72" />
           <div className="flex flex-col justify-between w-full sm:flex-row">
             <div className="flex flex-col justify-between flex-1 m-5 sm:border-r">
               <div className="space-y-4">

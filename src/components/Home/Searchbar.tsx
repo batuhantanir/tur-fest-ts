@@ -39,8 +39,8 @@ import service from '@/lib/axios';
 
 export default function Component() {
   return (
-    <div className="flex justify-center items-center relative w-full h-fit px-0 md:px-0 py-0 ">
-      <div className="relative md:absolute w-full flex items-center justify-start h-full md:-top-10">
+    <div className="flex justify-center items-center relative w-full h-fit px-0 md:px-0 py-0 z-20">
+      <div className="relative md:absolute w-full flex items-center justify-start h-full md:-top-5 ">
         <div className="w-full md:container md:mx-auto flex justify-center items-center">
           <Card className=" rounded-lg md:border border-0 w-full max-w-[1000px]">
             <CardContent className="p-6 md:pt-2 md:pb-6">
