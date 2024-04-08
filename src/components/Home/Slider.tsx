@@ -29,16 +29,17 @@ const Slider = () => {
   return (
     <>
       <Swiper
-        className="w-full h-[100dvh] max-h-[1080px] "
+        className="w-full h-[100dvh] max-h-[400px] md:max-h-[800px] "
         pagination={{
           dynamicBullets: true,
           clickable: true,
         }}
         modules={[Autoplay, Pagination]}
         autoplay={{
-          delay: 7000,
+          delay: 3000,
           disableOnInteraction: false,
         }}
+        grabCursor={true}
         loop={true}
       >
         {images.map((path, index) => (

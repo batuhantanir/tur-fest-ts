@@ -39,11 +39,11 @@ import service from '@/lib/axios';
 
 export default function Component() {
   return (
-    <div className="flex justify-center items-center relative w-full h-fit px-0 md:px-0 py-0 z-20">
-      <div className="relative md:absolute w-full flex items-center justify-start h-full md:-top-5 ">
-        <div className="w-full md:container md:mx-auto flex justify-center items-center">
-          <Card className=" rounded-lg md:border border-0 w-full max-w-[1000px]">
-            <CardContent className="p-6 md:pt-2 md:pb-6">
+    <div className="flex justify-center items-center relative w-full h-fit px-0 md:px-0 py-0 z-20 ">
+      <div className="relative md:absolute w-full flex items-center justify-start h-full md:-top-5  ">
+        <div className="w-full md:container md:mx-auto flex justify-center items-center ">
+          <Card className=" rounded-lg md:border border-0 w-full max-w-[1000px] md:shadow-gray-400 md:shadow-sm">
+            <CardContent className="p-6 md:pt-6 md:pb-4">
               <ComboboxForm />
             </CardContent>
           </Card>
@@ -86,7 +86,7 @@ export function ComboboxForm() {
         );
       })
       .catch((error) => {
-        // console.log(error);
+        console.log(error);
       });
   }, []);
 
@@ -128,18 +128,24 @@ export function ComboboxForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 flex flex-col md:flex-row items-end justify-center w-full gap-2 py-2 md:py-0 md:gap-8"
+        className={cn(
+          ' flex flex-col md:flex-row items-center justify-center w-full gap-6 pt-2 md:py-0 md:gap-8 '
+        )}
       >
         <FormField
           control={form.control}
           name="city"
           render={({ field }) => (
-            <FormItem className="flex flex-col w-full whitespace-nowrap">
+            <FormItem
+              className={cn('flex flex-col w-full whitespace-nowrap md:pb-7', {
+                'md:pb-0': form.formState.errors.city,
+              })}
+            >
               <FormLabel className="text-lg flex items-center gap-1">
                 <LuLocate
                   className="text-cst-primary mr-0.5 md:mr-2"
                   size={24}
-                />{' '}
+                />
                 Nereye gitmek istersiniz?
               </FormLabel>
               <Popover>
@@ -169,7 +175,7 @@ export function ComboboxForm() {
                       placeholder="Şehir ara..."
                       className="h-9 border-none outline-none ring-0 focus:ring-0 focus:outline-none"
                     />
-                    <CommandEmpty className="text-muted-foreground">
+                    <CommandEmpty className="text-muted-foreground py-2 px-4">
                       Şehir bulunamadı.
                       <br /> Lütfen başka bir şehir adı giriniz.
                     </CommandEmpty>
@@ -205,7 +211,11 @@ export function ComboboxForm() {
           control={form.control}
           name="month"
           render={({ field }) => (
-            <FormItem className="flex flex-col w-full whitespace-nowrap">
+            <FormItem
+              className={cn('flex flex-col w-full whitespace-nowrap md:pb-7', {
+                'md:pb-0': form.formState.errors.month,
+              })}
+            >
               <FormLabel className="text-lg flex gap-1 items-center">
                 <LuCalendar
                   className="text-cst-primary mr-0.5 md:mr-2"
@@ -220,11 +230,11 @@ export function ComboboxForm() {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        'w-full justify-between',
+                        'w-full justify-between ',
                         !field.value && 'text-muted-foreground'
                       )}
                     >
-                      <p className="first-letter:uppercase">
+                      <p className="first-letter:uppercase max-w-[300px] overflow-hidden">
                         {selectedMonths.length > 0
                           ? selectedMonths
                               .map((monthIndex) => months[parseInt(monthIndex)])
@@ -261,7 +271,14 @@ export function ComboboxForm() {
                                 </FormControl>
                                 <Label
                                   htmlFor={`month-${i}`}
-                                  className="flex first-letter:uppercase flex-col aspect-square items-center justify-center rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                  className={cn(
+                                    'flex cursor-pointer first-letter:uppercase flex-col aspect-square items-center justify-center rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground',
+                                    {
+                                      'border-primary': selectedMonths.includes(
+                                        String(i)
+                                      ),
+                                    }
+                                  )}
                                   onClick={() => toggleMonth(String(i))}
                                 >
                                   {month}
