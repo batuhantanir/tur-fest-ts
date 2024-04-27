@@ -74,73 +74,25 @@ function Desktop({ children }: any) {
           </div>
           <nav className="hidden md:flex flex-col md:flex-row gap-3 md:gap-6 py-2 mb-1 px-5 text-gray-500">
             {navLinks.map((link, index) => (
-              <>
-                {link.text == 'Turlar' ? (
-                  <div className="group relative">
-                    <a
-                      key={index}
-                      className={twMerge(
-                        ' hover:text-black transition-all duration-300 after:transition-all after:duration-300 after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
-                        `${
-                          (typeof link.href == 'string'
-                            ? pathname === link.href
-                            : link.href.find((href) => href == pathname)) &&
-                          'after:w-full text-black'
-                        }`,
-                        pathname == '/' &&
-                          (scrollY > scrollPoint
-                            ? 'hover:text-black'
-                            : 'text-white hover:text-white/80 after:bg-white')
-                      )}
-                      href={
-                        typeof link.href == 'string' ? link.href : link.href[0]
-                      }
-                    >
-                      {link.text}
-                    </a>
-                    <div className="hidden rounded-lg w-[380px] h-[230px] bg-white absolute top-8 md:group-hover:block">
-                      <div className="flex pt-14">
-                        <div className="flex items-center justify-center w-1/2 gap-4 flex-col">
-                          <div className="bg-gray-300 rounded-full flex justify-start">
-                            <a href="/tours" className='px-5'>Marmara Turları</a>
-                          </div>
-                          <div className=" flex justify-start">
-                            <a href="/tours" className="text-left">
-                              Yurtiçi Turlar
-                            </a>
-                          </div>
-                          <div className="">
-                            <a href="/tours">Karadeniz Turları</a>
-                          </div>
-                        </div>
-                        <div className="w-1/2">Ssss</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <a
-                    key={index}
-                    className={twMerge(
-                      'relative hover:text-black transition-all duration-300 after:transition-all after:duration-300 after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
-                      `${
-                        (typeof link.href == 'string'
-                          ? pathname === link.href
-                          : link.href.find((href) => href == pathname)) &&
-                        'after:w-full text-black'
-                      }`,
-                      pathname == '/' &&
-                        (scrollY > scrollPoint
-                          ? 'hover:text-black'
-                          : 'text-white hover:text-white/80 after:bg-white')
-                    )}
-                    href={
-                      typeof link.href == 'string' ? link.href : link.href[0]
-                    }
-                  >
-                    {link.text}
-                  </a>
+              <a
+                key={index}
+                className={twMerge(
+                  'relative hover:text-black transition-all duration-300 after:transition-all after:duration-300 after:absolute hover:after:w-full after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-black ',
+                  `${
+                    (typeof link.href == 'string'
+                      ? pathname === link.href
+                      : link.href.find((href) => href == pathname)) &&
+                    'after:w-full text-black'
+                  }`,
+                  pathname == '/' &&
+                    (scrollY > scrollPoint
+                      ? 'hover:text-black'
+                      : 'text-white hover:text-white/80 after:bg-white')
                 )}
-              </>
+                href={typeof link.href == 'string' ? link.href : link.href[0]}
+              >
+                {link.text}
+              </a>
             ))}
           </nav>
         </div>
